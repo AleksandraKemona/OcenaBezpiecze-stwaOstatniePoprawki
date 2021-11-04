@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scene Scope="Project" version="2">
+    <Scope Scope="Faces Configuration Only">
+        <Node id="cosmetic/createCosmetic.xhtml" x="650" y="300" zoom="true"/>
+        <Node id="analysis/listAnalysis.xhtml" x="1900" y="150" zoom="true"/>
+        <Node id="account/listAccounts.xhtml" x="1650" y="150" zoom="true"/>
+        <Node id="login/simpleFormLogin.xhtml" x="1400" y="300" zoom="true"/>
+        <Node id="cosmetic/deleteCosmetic.xhtml" x="1650" y="300" zoom="true"/>
+        <Node id="substrate/listSubstrates.xhtml" x="400" y="150" zoom="true"/>
+        <Node id="category/listCategories.xhtml" x="150" y="150" zoom="true"/>
+        <Node id="main/index.xhtml" x="400" y="600" zoom="true"/>
+        <Node id="cosmetic/listCosmetics.xhtml" x="400" y="300" zoom="true"/>
+        <Node id="substrate/createSubstrate.xhtml" x="150" y="1050" zoom="true"/>
+        <Node id="account/validateAccount.xhtml" x="400" y="450" zoom="true"/>
+        <Node id="cosmetic/confirmCosmetic.xhtml" x="1150" y="300" zoom="true"/>
+        <Node id="cosmetic/editCosmetic.xhtml" x="150" y="300" zoom="true"/>
+        <Node id="analysis/createAnalysis.xhtml" x="900" y="600" zoom="true"/>
+        <Node id="category/createCategory.xhtml" x="650" y="150" zoom="true"/>
+        <Node id="account/createAccount.xhtml" x="1400" y="150" zoom="true"/>
+    </Scope>
+    <Scope Scope="Project">
+        <Node id="cosmetic/createCosmetic.xhtml" x="650" y="300" zoom="true"/>
+        <Node id="templates/menu.xhtml" x="650" y="750" zoom="true"/>
+        <Node id="substrate/editSubstrate.xhtml" x="1150" y="450" zoom="true"/>
+        <Node id="analysis/listAnalysis.xhtml" x="1900" y="150" zoom="true"/>
+        <Node id="category/categoryDetails.xhtml" x="150" y="600" zoom="true"/>
+        <Node id="login/formLoginError.xhtml" x="150" y="450" zoom="true"/>
+        <Node id="account/confirmAccount.xhtml" x="900" y="450" zoom="true"/>
+        <Node id="cosmetic/confirmCosmetic.xhtml" x="1150" y="300" zoom="true"/>
+        <Node id="login/formLogin.xhtml" x="150" y="900" zoom="true"/>
+        <Node id="account/createAccount.xhtml" x="1400" y="150" zoom="true"/>
+        <Node id="category/createCategory.xhtml" x="650" y="150" zoom="true"/>
+        <Node id="account/listAccounts.xhtml" x="1650" y="150" zoom="true"/>
+        <Node id="templates/MainTemplate.xhtml" x="400" y="900" zoom="true"/>
+        <Node id="analysis/editAnalysis.xhtml" x="1400" y="450" zoom="true"/>
+        <Node id="cosmetic/deleteCosmetic.xhtml" x="1650" y="300" zoom="true"/>
+        <Node id="substrate/listSubstrates.xhtml" x="400" y="150" zoom="true"/>
+        <Node id="category/listCategories.xhtml" x="150" y="150" zoom="true"/>
+        <Node id="main/index.xhtml" x="400" y="600" zoom="true"/>
+        <Node id="cosmetic/listCosmetics.xhtml" x="400" y="300" zoom="true"/>
+        <Node id="substrate/createSubstrate.xhtml" x="150" y="1050" zoom="true"/>
+        <Node id="account/validateAccount.xhtml" x="400" y="450" zoom="true"/>
+        <Node id="cosmetic/cosmeticDetails.xhtml" x="900" y="150" zoom="true"/>
+        <Node id="category/editCategory.xhtml" x="900" y="300" zoom="true"/>
+        <Node id="cosmetic/editCosmetic.xhtml" x="150" y="300" zoom="true"/>
+        <Node id="analysis/createAnalysis.xhtml" x="900" y="600" zoom="true"/>
+    </Scope>
+    <Scope Scope="All Faces Configurations">
+        <Node id="cosmetic/createCosmetic.xhtml" x="650" y="300" zoom="true"/>
+        <Node id="analysis/listAnalysis.xhtml" x="1900" y="150" zoom="true"/>
+        <Node id="account/listAccounts.xhtml" x="1650" y="150" zoom="true"/>
+        <Node id="login/simpleFormLogin.xhtml" x="1400" y="300" zoom="true"/>
+        <Node id="cosmetic/deleteCosmetic.xhtml" x="1650" y="300" zoom="true"/>
+        <Node id="category/listCategories.xhtml" x="150" y="150" zoom="true"/>
+        <Node id="substrate/listSubstrates.xhtml" x="400" y="150" zoom="true"/>
+        <Node id="login/authenticate.xhtml" x="1150" y="150" zoom="true"/>
+        <Node id="main/index.xhtml" x="400" y="600" zoom="true"/>
+        <Node id="cosmetic/listCosmetics.xhtml" x="400" y="300" zoom="true"/>
+        <Node id="substrate/createSubstrate.xhtml" x="150" y="1050" zoom="true"/>
+        <Node id="account/validateAccount.xhtml" x="400" y="450" zoom="true"/>
+        <Node id="cosmetic/confirmCosmetic.xhtml" x="1150" y="300" zoom="true"/>
+        <Node id="cosmetic/editCosmetic.xhtml" x="150" y="300" zoom="true"/>
+        <Node id="analysis/createAnalysis.xhtml" x="900" y="600" zoom="true"/>
+        <Node id="account/createAccount.xhtml" x="1400" y="150" zoom="true"/>
+        <Node id="category/createCategory.xhtml" x="650" y="150" zoom="true"/>
+    </Scope>
+</Scene>
