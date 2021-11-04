@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition   xmlns="http://www.w3.org/1999/xhtml"
+                  xmlns:ui="http://java.sun.com/jsf/facelets" 
+
+                  template="../templates/MainTemplate.xhtml"
+                  xmlns:b="http://bootsfaces.net/ui"
+                  xmlns:h="http://java.sun.com/jsf/html"
+                  xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="top">
+        <b:container fluid="true">
+            <b:row>
+                <ui:include src="../templates/menu.xhtml" />
+            </b:row>
+        </b:container>
+    </ui:define>
+
+    <ui:define name="content">
+        
+        <b:container fluid="true">
+            <h2 align="center" style="color: navy; font-size:18px">${msg['analysis.list']}</h2>
+            <b:column>
+                <b:form>
+                    <b:commandButton style="background-color: thistle" iconAwesome="refresh" action="#{listAnalysisBean.init()}" />
+                    <b:commandButton style="background-color: thistle; font-weight: bold" value="Dodaj analizę" action="#{createAnalysisBean.begin()}" immediate="true"/>
+                    <br/>
+                    <br/>
+                    <b:dataTable  var="row" value="#{listAnalysisBean.analysisList}" >
+                     
+                        <b:dataTableColumn id="name">
+                            <f:facet name="header">${msg['analysis.name']}</f:facet>
+                            <h:outputText value="#{row.name}"/>
+                        </b:dataTableColumn>
+
+                        <b:dataTableColumn id="minimum">
+                            <f:facet name="header">${msg['analysis.min']}</f:facet>
+                            <h:outputText value="#{row.minimum}"/>
+                        </b:dataTableColumn>
+                        
+                        <b:dataTableColumn id="maximum">
+                            <f:facet name="header">${msg['analysis.max']}</f:facet>
+                            <h:outputText value="#{row.maximum}"/>
+                        </b:dataTableColumn>
+                        
+                        <b:dataTableColumn id="standard">
+                            <f:facet name="header">${msg['analysis.standard']}</f:facet>
+                            <h:outputText value="#{row.standard}"/>
+                        </b:dataTableColumn>
+
+                        <b:dataTableColumn id="actions">
+                            <f:facet name="header">${msg['analysis.edit']}</f:facet>
+                            <b:commandButton iconAwesome="pencil"  action="#{listAnalysisBean.edit(row)}" />
+                            
+                        </b:dataTableColumn>
+                    </b:dataTable>
+                </b:form>
+            </b:column>
+        </b:container>
+    </ui:define>
+
+</ui:composition>
+

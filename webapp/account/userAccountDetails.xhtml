@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition   xmlns="http://www.w3.org/1999/xhtml"
+                  xmlns:ui="http://java.sun.com/jsf/facelets" 
+
+                  template="../templates/MainTemplate.xhtml"
+                  xmlns:b="http://bootsfaces.net/ui"
+                  xmlns:h="http://java.sun.com/jsf/html"
+                  xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="top">
+        <b:container>
+            <b:row style="background: thistle">
+                <h1 align="center" style="color: black">#{cosmeticDetailsBean.showedCosmetic.name}</h1>
+            </b:row>
+        </b:container>
+    </ui:define>
+
+    <ui:define name="top">
+        <b:container fluid="true">
+            <b:row>
+                <ui:include src="../templates/menu.xhtml" />
+            </b:row>
+        </b:container>
+    </ui:define>
+
+    <ui:define name="content">
+        <b:container>
+            <b:form id = "myAccountDetails">
+
+                Login: <h:outputText id="login" value="#{accountDetailsBean.showedAccount.login}"/><br />
+                <h:message for="login"/>
+                Imie: <h:outputText id="name" value="#{accountDetailsBean.showedAccount.name}"/><h:message for="name"/><br />
+                Nazwisko: <h:outputText id="surname" value="#{accountDetailsBean.showedAccount.surname}"/><h:message for="surname"/><br />
+                Email: <h:outputText id="email" value="#{accountDetailsBean.showedAccount.email}"/><h:message for="email"/><br />
+                Numer telefonu: <h:outputText id="phone" value="#{accountDetailsBean.showedAccount.phone}"/><h:message for="phone"/><br />
+                
+            </b:form>
+        </b:container>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:b="http://bootsfaces.net/ui">
+    <b:container fluid="true">
+        <h:form id="menu">
+            <b:navBar style="background-color: thistle; border-color: thistle; align-content: center" brandHref="#" fluid="true" sticky="true">
+                <b:navbarLinks>
+                    <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold" value="${msg['main.page']}" href="#" action="main"></b:navCommandLink>
+                    <f:subview id="menuKontoNotLoggedIn" rendered="#{empty request.remoteUser}">
+                        <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold" iconAwesome="user-plus" value="${msg['menu.register']}" action="#{createAccountBean.init()}" />
+                    </f:subview>
+
+                    <f:subview id="admin" rendered="#{request.isUserInRole('Administrator')}">
+                        <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold" iconAwesome="list" value="${msg['menu.adminPanel']}" href="#" action="listAccounts"></b:navCommandLink>           
+                        <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold" iconAwesome="user-plus" value="${msg['admin.createUserAccount']}" href="#" action="createAccount"></b:navCommandLink>  
+                    </f:subview>
+
+                    <f:subview id="assessor" rendered="#{request.isUserInRole('Assessor')}">
+                        <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold" iconAwesome="list" value="${msg['menu.products.list']}" href="#" action="listCosmetics"></b:navCommandLink>
+
+                        <b:dropMenu style="color: navy; font-size: 18px; font-weight: bold" value="${msg['menu.categories']}">
+                            <b:navCommandLink style="color: navy; font-size: 15px" iconAwesome="list" value="${msg['menu.list']}" href="#" action="listCategories"></b:navCommandLink> 
+                            <b:navCommandLink style="color: navy; font-size: 15px" iconAwesome="plus" value="${msg['category.add']}" href="#" action="#{createCategoryBean.begin()}"></b:navCommandLink>
+                        </b:dropMenu>
+                        <b:dropMenu style="color: navy; font-size: 18px; font-weight: bold" value="${msg['menu.analysis']}">
+                            <b:navCommandLink style="color: navy; font-size: 15px" iconAwesome="list" value="${msg['menu.list']}" href="#" action="listAnalysis"></b:navCommandLink> 
+                            <b:navCommandLink style="color: navy; font-size: 15px" iconAwesome="plus" value="${msg['analysis.add']}" href="#" action="#{createAnalysisBean.begin()}"></b:navCommandLink>
+                        </b:dropMenu>
+                        <b:dropMenu style="color: navy; font-size: 18px; font-weight: bold" value="${msg['menu.substrates']}">
+                            <b:navCommandLink style="color: navy; font-size: 15px" iconAwesome="list" value="${msg['menu.list']}" href="#" action="listSubstrates"></b:navCommandLink> 
+                            <b:navCommandLink style="color: navy; font-size: 15px" iconAwesome="plus" value="${msg['substrate.add']}" href="#" action="#{createSubstrateBean.begin()}"></b:navCommandLink>
+                        </b:dropMenu>
+
+                    </f:subview>
+                    <f:subview id="sales" rendered="#{request.isUserInRole('Sales')}">
+                        <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold" iconAwesome="list" value="${msg['menu.products.list']}" href="#" action="listCosmetics"></b:navCommandLink>
+                        <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold" iconAwesome="list" value="${msg['cosmetic.add']}" href="#" action="#{createCosmeticBean.begin()}"></b:navCommandLink>
+
+                    </f:subview>
+                    <f:subview id="lab" rendered="#{request.isUserInRole('LabTechnician')}">
+                        <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold" iconAwesome="list" value="${msg['menu.products.list']}" href="#" action="listCosmetics"></b:navCommandLink>
+                        <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold" iconAwesome="list" value="${msg['menu.analysis.list']}" href="#" action="listAnalysis"></b:navCommandLink>
+                        <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold" iconAwesome="plus" value="${msg['analysis.add']}" href="#" action="#{createAnalysisBean.begin()}"></b:navCommandLink>
+                    </f:subview>
+                </b:navbarLinks>
+
+                <b:navbarLinks pull="right">
+                    <f:subview id="menuKontoNotLoggedInRight" rendered="#{empty request.remoteUser}">
+                        <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold" value="${msg['menu.resetPassword']}" action="#{resetPasswordBean.begin()}" />
+                        <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold" iconAwesome="sign-in" value="${msg['action.login']}" action="login" />
+                    </f:subview>
+                    <f:subview id="menuKontoLoggedIn" rendered="#{not empty request.remoteUser}">
+                        <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold"  value="${contextUtils.getUserName()}" />
+                        <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold" iconAwesome="cog" value="${msg['account.details']}" action="#{listAccountsBean.showMyAccountDetails(contextUtils.getUserName())}" />
+                        <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold" iconAwesome="sign-out" value="${msg['action.logout']}" action="#{logoutBean.logout()}" />
+                    </f:subview>
+                </b:navbarLinks>
+
+            </b:navBar>
+
+
+
+        </h:form>
+    </b:container>
+</ui:composition>

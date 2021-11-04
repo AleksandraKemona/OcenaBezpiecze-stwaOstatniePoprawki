@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                template="../templates/MainTemplate.xhtml"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="top">
+        <b:container>
+            <b:row style="background: thistle">
+                <h1 align="center" style="color: black">${msg['result.edit']}</h1>
+            </b:row>
+        </b:container>
+    </ui:define>
+
+
+    <ui:define name="content">
+        <b:container>
+            <h:form id="editResultsForm" style="font-size: 18px;">
+                <h:messages globalOnly="true" styleClass="error" />
+                <h:messages id="success" for="success" styleClass="confirm" />
+                ${msg['cosmetic.analysis']}: <h:outputText id="name" value="#{cosmeticDetailsBean.analysisForResults.name}"/><h:message for="name"/><br />
+                ${msg['cosmetic.result']}<b:inputText id="result" value="#{cosmeticDetailsBean.analysisForResults.resultInAnalysis}" required="true"/><h:message for="result"/><br/>
+
+                <b:commandButton value="${msg['action.confirm']}" action="#{cosmeticDetailsBean.saveResult()}" />
+                <b:commandButton value="${msg['action.cancel']}" action="#{editCosmeticBean.abort()}" immediate="true"/>
+            </h:form>
+        </b:container>
+    </ui:define>
+</ui:composition>
+
+
+

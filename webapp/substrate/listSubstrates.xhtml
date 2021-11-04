@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition   xmlns="http://www.w3.org/1999/xhtml"
+                  xmlns:ui="http://java.sun.com/jsf/facelets" 
+
+                  template="../templates/MainTemplate.xhtml"
+                  xmlns:b="http://bootsfaces.net/ui"
+                  xmlns:h="http://java.sun.com/jsf/html"
+                  xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="top">
+        <b:container fluid="true">
+            <b:row>
+                <ui:include src="../templates/menu.xhtml" />
+            </b:row>
+        </b:container>
+    </ui:define>
+
+    <ui:define name="content">
+        <b:container fluid="true">
+           <h2 align="center" style="color: navy; font-size:18px">${msg['substrate.list']}</h2>
+            <b:column>
+                <b:form>
+                    <b:commandButton style="background-color: thistle" iconAwesome="refresh" action="#{listSubstratesBean.init()}" />
+                    <b:commandButton style="background-color: thistle; font-weight: bold" value="Dodaj surowiec" action="#{createSubstrateBean.begin()}" immediate="true"/>
+                    <br/>
+                    <br/>
+                    <b:dataTable  var="row" value="#{listSubstratesBean.substrates}" >
+
+                        <h:column id="name">
+                            <f:facet name="header">${msg['substrate.name']}</f:facet>
+                            <h:outputText value="#{row.substrateName}"/>
+                        </h:column>
+
+                        <h:column id="analysis">
+                            <f:facet name="header">${msg['substrate.description']}</f:facet>
+                            <h:outputText value="#{row.substrateDescription}"/>
+                                </h:column>
+                                
+                        <h:column id="actions">
+                            <f:facet name="header">Akcje</f:facet>
+                            
+                            <b:commandButton value="${msg['substrate.edit']}" action="#{listSubstratesBean.edit(row)}" />
+                            
+                          
+                        </h:column>
+                    </b:dataTable>
+                </b:form>
+            </b:column>
+        </b:container>
+    </ui:define>
+
+</ui:composition>
+

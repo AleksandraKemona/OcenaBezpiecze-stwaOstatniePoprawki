@@ -1,0 +1,181 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<faces-config version="2.2"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+     
+    <application>
+        <locale-config>
+            <default-locale>pl</default-locale>
+            <supported-locale>pl</supported-locale>
+            <supported-locale>en</supported-locale>
+        </locale-config>
+        <resource-bundle>
+            <base-name>i18n.messages</base-name>
+            <var>msg</var>
+        </resource-bundle>
+        <message-bundle>
+            i18n.jsf_messages
+        </message-bundle>
+        <resource-bundle>
+            <base-name>/Bundle</base-name>
+            <var>bundle</var>
+        </resource-bundle>
+    </application>
+    
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>createCosmetic</from-outcome>
+            <to-view-id>/cosmetic/createCosmetic.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>listCosmetics</from-outcome>
+            <to-view-id>/cosmetic/listCosmetics.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>editCosmetics</from-outcome>
+            <to-view-id>/cosmetic/editCosmetic.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>deleteCosmetics</from-outcome>
+            <to-view-id>/cosmetic/deleteCosmetic.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>confirmCosmetic</from-outcome>
+            <to-view-id>/cosmetic/confirmCosmetic.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>editResults</from-outcome>
+            <to-view-id>/cosmetic/editResults.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>createCategory</from-outcome>
+            <to-view-id>/category/createCategory.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>listCategories</from-outcome>
+            <to-view-id>/category/listCategories.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>createAnalysis</from-outcome>
+            <to-view-id>/analysis/createAnalysis.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>listAnalysis</from-outcome>
+            <to-view-id>/analysis/listAnalysis.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>createSubstrate</from-outcome>
+            <to-view-id>/substrate/createSubstrate.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>listSubstrates</from-outcome>
+            <to-view-id>/substrate/listSubstrates.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>createAccount</from-outcome>
+            <to-view-id>/account/createAccount.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>createAccountSucces</from-outcome>
+            <to-view-id>/account/createAccountSucces.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>myAccountDetails</from-outcome>
+            <to-view-id>/account/myAccountDetails.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>userAccountDetails</from-outcome>
+            <to-view-id>/account/userAccountDetails.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        
+        
+        <navigation-case>
+            <from-outcome>listAccounts</from-outcome>
+            <to-view-id>/account/listAccounts.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>validateAccount</from-outcome>
+            <to-view-id>/account/validateAccount.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>main</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+         
+        <navigation-case>
+            <from-outcome>login</from-outcome>
+            <to-view-id>/login/formLogin.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>resetPasswordRequest</from-outcome>
+            <to-view-id>/account/resetPasswordRequest.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>resetPassword</from-outcome>
+            <to-view-id>/account/resetPassword.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>passwordResetSucces</from-outcome>
+            <to-view-id>/account/passwordResetSucces.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
+</faces-config>

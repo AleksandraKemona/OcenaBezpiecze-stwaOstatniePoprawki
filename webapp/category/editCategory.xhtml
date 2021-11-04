@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                template="../templates/MainTemplate.xhtml"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="top">
+        <b:container>
+            <b:row style="background: thistle">
+                <h1 align="center" style="color: black">${msg['category.edit']}</h1>
+            </b:row>
+        </b:container>
+    </ui:define>
+
+    <ui:define name="content">
+        <b:container>
+            <h:form id="editCategory" style="font-size: 18px;">
+                ${msg['category.name']} *: <b:inputText id="name" value="#{editCategoryBean.editedCategory.categoryName}"/><h:message for="name"/><br />
+            
+                ${msg['category.demandedAnalysis']} *: <h:outputText id="analysis" value="#{editCategoryBean.editedCategory.demandsAnalysisString}" /><h:message for="composition"/><br/>
+                
+
+                <b:commandButton value="${msg['action.edit']}" action="#{editCategoryBean.saveCategory()}" />
+                <b:commandButton value="${msg['action.cancel']}" action="#{editCategoryBean.abort()}" immediate="true"/>
+        </h:form>
+        </b:container>
+    </ui:define>
+</ui:composition>
+
+
+

@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition   xmlns="http://www.w3.org/1999/xhtml"
+                  xmlns:ui="http://java.sun.com/jsf/facelets" 
+
+                  template="../templates/MainTemplate.xhtml"
+                  xmlns:b="http://bootsfaces.net/ui"
+                  xmlns:h="http://java.sun.com/jsf/html"
+                  xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="top">
+        <b:container>
+            <b:row style="background: thistle">
+                <h1 align="center" style="color: black">#{cosmeticDetailsBean.showedCosmetic.name}</h1>
+            </b:row>
+        </b:container>
+    </ui:define>
+
+    <ui:define name="left">
+        <ui:include src="../templates/menu.xhtml" />
+    </ui:define>
+
+    <ui:define name="content">
+        <b:container>
+            <b:form id = "cosmeticDetailsForm">
+                ${msg['cosmetic.orderNb']}:<br/> <h:outputText style="font-size: 20px; font-weight: bold; color: navy" id="orderNb" value="#{cosmeticDetailsBean.showedCosmetic.orderNb}" /><br/><br/>
+                ${msg['cosmetic.categoryChoice']}:<br/><h:outputText style="font-size: 20px; font-weight: bold; color: navy" id="categoryName" value="#{cosmeticDetailsBean.showedCosmetic.category.categoryName}"/><br/><br/>
+                ${msg['cosmetic.composition']} <br/><h:outputText style="font-size: 20px; font-weight: bold; color: navy" id="composition" value="#{cosmeticDetailsBean.showedCosmetic.composition}"/><br/><br/>
+
+                <b:dataTable  excel="true" pdf="true" lengthChange="false" var="rowA" searching="false" paginated="false" info="false"
+                              value="#{cosmeticDetailsBean.appliedCategory.demandsAnalysis}" >
+                    <h:column id="analysis">
+                        <f:facet name="header">${msg['cosmetic.analysis']}</f:facet>
+                        <h:outputText value="#{rowA.name}"/>
+                    </h:column>
+                    <h:column id="value">
+                        <f:facet name="header">${msg['cosmetic.result']}</f:facet>
+                        <h:outputText value="#{rowA.resultInAnalysis}"/>
+                        <b:commandButton value="${msg['action.edit']}" action="#{cosmeticDetailsBean.editResult(rowA)}" 
+                                         rendered="#{request.isUserInRole('LabTechnician')}"
+                                             />
+                    </h:column>
+
+                    <h:column id="min">
+                        <f:facet name="header">${msg['analysis.min']}</f:facet>
+                        <h:outputText value="#{rowA.minimum}"/>
+                    </h:column>
+                    <h:column id="max">
+                        <f:facet name="header">${msg['analysis.max']}</f:facet>
+                        <h:outputText value="#{rowA.maximum}"/>
+                    </h:column>
+                    <h:column id="isAcceptable">
+                        <f:facet name="header">${msg['analysis.isOk']}</f:facet>
+                        <h:outputText value="${msg['analysis.inNorm']}" rendered="#{rowA.inRange}"/>
+                        <h:outputText style="color: red" value="${msg['analysis.outOfNorm']}" rendered="#{not rowA.inRange}"/>
+                    </h:column>
+                </b:dataTable><br/>
+
+
+
+                <b:commandButton value="${msg['toxicology.generate']}" action="#{createToxicologyBean.createToxicology(cosmeticDetailsBean.getAppliedSubstrates(), cosmeticDetailsBean.getDescribedCosmeticId())}" immediate="true"                             
+                                 rendered="#{request.isUserInRole('Assessor') and not cosmeticDetailsBean.showedCosmetic.hasToxicology}"/>
+                <b:dataTable  excel="true" pdf="true" lengthChange="false" var="row" searching="false" paginated="false" info="false"
+                              value="#{cosmeticDetailsBean.showedCosmetic.toxicology.describedBy}" rendered="#{cosmeticDetailsBean.showedCosmetic.hasToxicology}" >
+                <h:column id="Substrate">
+                        <f:facet name="header">${msg['cosmetic.substrate']}</f:facet>
+                        <h:outputText value="#{row.substrateName}"/>
+                    </h:column>
+                    <h:column id="description">
+                        <f:facet name="header">${msg['cosmetic.toxicologicDescription']}</f:facet>
+                        <h:outputText value="#{row.substrateDescription}"/>
+                    </h:column>
+                
+                </b:dataTable><br/>
+                <b:commandButton value="${msg['cosmetic.backToList']}" action="listCosmetics" immediate="true"/>
+            </b:form>
+        </b:container>
+    </ui:define>
+</ui:composition>

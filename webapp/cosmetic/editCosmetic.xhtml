@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                template="../templates/MainTemplate.xhtml"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="top">
+        <b:container>
+            <b:row style="background: thistle">
+                <h1 align="center" style="color: black">${msg['cosmetic.edit']}</h1>
+            </b:row>
+        </b:container>
+    </ui:define>
+
+    <ui:define name="left">
+        <ui:include src="../templates/menu.xhtml" />
+    </ui:define>
+
+    <ui:define name="content">
+        <b:container>
+            <h:form id="editCosmeticForm" style="font-size: 18px;">
+                <h:messages globalOnly="true" style="color: red; font-size: 15px;" styleClass="error_large" />
+                <h:messages id="success" for="success" styleClass="confirm_large" />
+                ${msg['cosmetic.orderNb']}:<br/> <h:outputText style="font-size: 20px; font-weight: bold; color: navy" id="orderNb" value="#{editCosmeticBean.editedCosmetic.orderNb}" /><br/><br/>
+                <b:message for="orderNb"/><br />
+                ${msg['cosmetic.name']} *: <b:inputText id="name" value="#{editCosmeticBean.editedCosmetic.name}"/>
+                <b:message for="name"/><br />
+                ${msg['cosmetic.categoryChoice']} *:<b:selectOneMenu id="category" value="#{editCosmeticBean.editedCosmetic.category.categoryName}">
+                    <f:selectItems  value="#{editCosmeticBean.listCategoryDTO}" var="categoryName" itemValue="#{categoryName.categoryName}" itemLabel="#{categoryName}" />
+                </b:selectOneMenu><br/>
+                <h:message for="category"/><br />
+                ${msg['cosmetic.composition']} *: <b:inputText id="composition" value="#{editCosmeticBean.editedCosmetic.composition}" required="true"/>
+                <b:message for="composition"/><br />
+                <b:commandButton value="${msg['action.confirm']}" action="#{editCosmeticBean.saveCosmetic()}" />
+                <b:commandButton value="${msg['action.cancel']}" action="#{editCosmeticBean.abort()}" immediate="true"/>
+            </h:form>
+        </b:container>
+    </ui:define>
+</ui:composition>
+
+
+

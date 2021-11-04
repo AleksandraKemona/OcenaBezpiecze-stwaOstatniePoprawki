@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="../templates/MainTemplate.xhtml"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="top">
+        <b:container>
+            <b:row style="background: thistle">
+                <h1 align="center" style="color: black">${msg['substrate.create']}</h1>
+            </b:row>
+        </b:container>
+    </ui:define>
+
+    <ui:define name="content">
+        <b:container>
+            <b:form id="createNewSubstrateForm">
+                ${msg['substrate.name']}*: <b:inputText id="name" value="#{createSubstrateBean.newSubstrate.substrateName}"/>
+                <b:messages for="name"/><br />
+                ${msg['substrate.description']} *: <b:inputText id="description" value="#{createSubstrateBean.newSubstrate.substrateDescription}"/><h:message for="min"/><br />
+                <b:message for="description"/> <br />
+                <b:commandButton value="${msg['action.create']}" action="#{createSubstrateBean.createSubstrate()}" />
+                <b:commandButton value="${msg['action.cancel']}" action="#{createSubstrateBean.abort()}" immediate="true"/>
+            </b:form>
+        </b:container>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="../templates/MainTemplate.xhtml"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="top">
+        <b:container>
+            <b:row style="background: thistle">
+                <h1 align="center" style="color: black">${msg['account.editUser']}</h1>
+            </b:row>
+        </b:container>
+    </ui:define>
+
+    <ui:define name="left">
+        <ui:include src="../templates/menu.xhtml" />
+    </ui:define>
+
+    <ui:define name="content">
+        <b:container>
+            <b:form id="createAccount">
+                ${msg['account.login']} *: <h:inputText id="login" value="#{editAccountBean.editedAccount.login}" required="true">
+                    <f:validateLength minimum="3" maximum="32" />
+                </h:inputText><h:message for="login"/> <br />
+                ${msg['account.password']} *: <h:inputSecret id="password" value="#{editAccountBean.editedAccount.newPassword}"/>
+                <h:message for="password" class="error" errorStyle="color:red"/><br />
+                ${msg['account.passwordRepeat']} *: <h:inputSecret id="repeatPassword" value="#{editAccountBean.repeatPassword}"/>
+                <h:message for="repeatPassword" class="error" errorStyle="color:red"/><br />
+                ${msg['account.name']} <h:inputText id="name" value="#{editAccountBean.editedAccount.name}"/><h:message for="name"/><br />
+                ${msg['account.surname']} <h:inputText id="surname" value="#{editAccountBean.editedAccount.surname}"/><h:message for="surname"/><br />
+                ${msg['account.email']} <h:inputText id="email" value="#{editAccountBean.editedAccount.email}"/><h:message for="email"/><br />
+                ${msg['account.phone']}: <h:inputText id="phone" value="#{editAccountBean.editedAccount.phone}"/><h:message for="phone"/><br />
+                <b:selectOneMenu value="#{editAccountBean.editedAccount.type}">
+                    <f:selectItem itemLabel="${msg['account.choose']}" itemValue="empty" />
+                    <f:selectItem itemLabel="${msg['account.admin']}" itemValue="Administrator"/>
+                    <f:selectItem itemLabel="${msg['account.assessor']}" itemValue="Assessor" />
+                    <f:selectItem itemLabel="${msg['account.sales']}" itemValue="Sales" />
+                    <f:selectItem itemLabel="${msg['account.lab']}" itemValue="LabTechnician" />
+                </b:selectOneMenu><br/>
+                
+                <b:commandButton value="${msg['action.confirm']}" action="#{editAccountBean.saveUserAccount()}" />
+                <b:commandButton value="${msg['action.cancel']}" action="#{createAccountBean.abort()}" immediate="true"/>
+            </b:form>
+        </b:container>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="4.0" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value>
+        <!--<param-value>Production</param-value>-->
+    </context-param>
+    <context-param>
+        <param-name>resourceBundle.path</param-name>
+        <param-value>i18n.messages</param-value>
+    </context-param>
+    
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>/faces/*</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    <welcome-file-list>
+        <welcome-file>faces/index.xhtml</welcome-file>
+    </welcome-file-list>
+    
+    <security-constraint>
+        <display-name>StronyAdministratora</display-name>
+        <web-resource-collection>
+            <web-resource-name>StronyAdministratora</web-resource-name>
+            <description/>
+            <url-pattern>/account/editMyAccount.xhtml</url-pattern>
+            <url-pattern>/account/myAccountDetails.xhtml</url-pattern>
+            <url-pattern>/faces/account/listAccounts.xhtml</url-pattern>
+            <url-pattern>/faces/account/editUserAccount.xhtml</url-pattern>
+            <url-pattern>/faces/account/userAccountDetails</url-pattern>
+            
+
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>Administrator</role-name>
+        </auth-constraint>
+    </security-constraint>
+    
+    <security-constraint>
+        <display-name>AssessorsPages</display-name>
+        <web-resource-collection>
+            <web-resource-name>AssessorsPages</web-resource-name>
+            <description/>
+            <url-pattern>/faces/account/editMyAccount.xhtml</url-pattern>
+            <url-pattern>/faces/account/myAccountDetails.xhtml</url-pattern>
+            <url-pattern>/faces/category/*</url-pattern>
+            <url-pattern>/faces/analysis/*</url-pattern>
+            <url-pattern>/faces/substrate/*</url-pattern>
+            <url-pattern>/faces/cosmetic/listCosmetics.xhtml</url-pattern>
+
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>Assessor</role-name>
+        </auth-constraint>
+    </security-constraint>
+    
+    <security-constraint>
+        <display-name>SalesPages</display-name>
+        <web-resource-collection>
+            <web-resource-name>SalesPages</web-resource-name>
+            <description/>
+            <url-pattern>/faces/account/editMyAccount.xhtml</url-pattern>
+            <url-pattern>/faces/account/myAccountDetails.xhtml</url-pattern>
+            <url-pattern>/faces/cosmetic/listCosmetics.xhtml</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>Sales</role-name>
+        </auth-constraint>
+    </security-constraint>
+    
+    <security-constraint>
+        <display-name>LabTechnicianSPages</display-name>
+        <web-resource-collection>
+            <web-resource-name>LabTechnicianSPages</web-resource-name>
+            <description/>
+            <url-pattern>/faces/account/editMyAccount.xhtml</url-pattern>
+            <url-pattern>/faces/account/myAccountDetails.xhtml</url-pattern>
+            <url-pattern>/faces/analysis/*</url-pattern>
+            <url-pattern>/faces/cosmetic/listCosmetics.xhtml</url-pattern>
+
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>LabTechnician</role-name>
+        </auth-constraint>
+    </security-constraint>
+   
+    <mime-mapping>
+        <extension>woff2</extension>
+        <mime-type>application/font-woff2</mime-type>
+    </mime-mapping>
+    
+    
+    <security-constraint>
+        <display-name>StronyHTTPS</display-name>
+        <web-resource-collection>
+            <web-resource-name>Wszystkie strony</web-resource-name>
+            <description/>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <description/>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+   
+    
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>SafetyAssessementJDBCRealm</realm-name>
+        <form-login-config>
+            <form-login-page>/faces/login/formLogin.xhtml</form-login-page>
+            <form-error-page>/faces/login/formLoginError.xhtml</form-error-page>
+        </form-login-config>
+    </login-config>
+    
+    
+     
+    
+    
+    <security-role>
+        <description/>
+        <role-name>Administrator</role-name>
+    </security-role>
+    <security-role>
+        <description/>
+        <role-name>Assessor</role-name>
+    </security-role>
+    <security-role>
+        <description/>
+        <role-name>Sales</role-name>
+    </security-role>
+    <security-role>
+        <description/>
+        <role-name>LabTechnician</role-name>
+    </security-role>
+    
+    <error-page>
+        <error-code>403</error-code>
+        <location>/faces/error/error403.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/faces/error/error404.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/faces/error/error.xhtml</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.RuntimeException</exception-type>
+        <location>/faces/error/error.xhtml</location>
+    </error-page>
+  
+
+
+</web-app>

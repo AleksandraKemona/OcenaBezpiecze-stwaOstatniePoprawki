@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="../templates/MainTemplate.xhtml"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="top">
+        <b:container>
+            <b:row style="background: thistle">
+                <h1 align="center" style="color: black">${msg['analysis.create']}</h1>
+            </b:row>
+        </b:container>
+    </ui:define>
+
+    <ui:define name="left">
+        <ui:include src="../templates/menu.xhtml" />
+    </ui:define>
+
+    <ui:define name="content">
+        <b:container>
+            <b:form id="createNewAnalysisForm">
+                ${msg['analysis.name']}*:<b:inputText id="name" value="#{createAnalysisBean.newAnalysis.name}" required="true"/>
+                <b:message for="name"/><br />
+                ${msg['analysis.min']} *:<b:inputText id="min" value="#{createAnalysisBean.newAnalysis.minimum}" required="true"/>
+                <b:message for="min"/><br />
+                ${msg['analysis.max']} *: <b:inputText id="max" value="#{createAnalysisBean.newAnalysis.maximum}" required="true"/>
+                <b:message for="max"/><br />
+                ${msg['analysis.standard']} *:<b:inputText id="standard" value="#{createAnalysisBean.newAnalysis.standard}" required="true"/>
+                <b:message for="standard"/> <br />
+                <b:commandButton value="${msg['action.confirm']}" action="#{createAnalysisBean.createAnalysis()}" />
+                <b:commandButton value="${msg['action.cancel']}" action="#{createAnalysisBean.abort()}" immediate="true"/>
+            </b:form>
+        </b:container>
+    </ui:define>
+</ui:composition>

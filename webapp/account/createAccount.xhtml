@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="../templates/MainTemplate.xhtml"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="top">
+        <b:container>
+            <b:row style="background: thistle">
+                <h1 align="center" style="color: black">${msg['account.create']}</h1>
+            </b:row>
+        </b:container>
+    </ui:define>
+
+    <ui:define name="left">
+        <ui:include src="../templates/menu.xhtml" />
+    </ui:define>
+
+    <ui:define name="content">
+        <b:container>
+            <b:form id="createAccount">
+                <h:messages globalOnly="true" styleClass="error_large" />
+                
+                ${msg['account.login']} *: <h:inputText id="login" value="#{createAccountBean.newAccount.login}" required="true">
+<!--                    <f:validateLength minimum="6" maximum="32" />-->
+                </h:inputText>
+                <h:message for="login" class="error" errorStyle="color:red"/> <br />
+                ${msg['account.password']} *: <h:inputSecret id="password" value="#{createAccountBean.newAccount.password}" required="true"/>
+                <h:message for="password" class="error" errorStyle="color:red"/><br />
+                ${msg['account.passwordRepeat']} *: <h:inputSecret id="repeatPassword" value="#{createAccountBean.repeatPassword}" required="true"/>
+                <h:message for="repeatPassword" class="error" errorStyle="color:red"/><br />
+                ${msg['account.name']} *: <h:inputText id="name" value="#{createAccountBean.newAccount.name}" required="true"/>
+                <h:message for="name" class="error" errorStyle="color:red"/><br />
+                ${msg['account.surname']} *: <h:inputText id="surname" value="#{createAccountBean.newAccount.surname}" required="true"/>
+                <h:message for="surname" class="error" errorStyle="color:red"/><br />
+                ${msg['account.email']} *: <h:inputText id="email" value="#{createAccountBean.newAccount.email}" required="true"/>
+                <h:message for="email" class="error" errorStyle="color:red"/><br />
+                ${msg['account.phone']} *: <h:inputText id="phone" value="#{createAccountBean.newAccount.phone}" required="true"/>
+                <h:message for="phone" class="error" errorStyle="color:red"/><br />
+                ${msg['account.question']} *:<h:inputText id="question" value="#{createAccountBean.newAccount.question}" required="true"/>
+                <h:message for="question" class="error" errorStyle="color:red"/><br />
+                ${msg['account.answer']} *: <h:inputText id="answer" value="#{createAccountBean.newAccount.answer}" required="true"/>
+                <h:message for="answer" class="error" errorStyle="color:red"/><br />
+                <b:commandButton value="${msg['action.confirm']}" action="#{createAccountBean.confirmAccount()}" />
+                <b:commandButton value="${msg['action.cancel']}" action="#{createAccountBean.abort()}" immediate="true"/>
+            </b:form>
+        </b:container>
+    </ui:define>
+</ui:composition>

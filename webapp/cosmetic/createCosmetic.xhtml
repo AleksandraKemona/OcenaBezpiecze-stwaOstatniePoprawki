@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="../templates/MainTemplate.xhtml"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="top">
+        <b:container>
+            <b:row style="background: thistle">
+                <h1 align="center" style="color: black">#{msg['cosmetic.create']}</h1>
+            </b:row>
+        </b:container>
+    </ui:define>
+
+    <ui:define name="left">
+        <ui:include src="../templates/menu.xhtml" />
+    </ui:define>
+
+    <ui:define name="content">
+        <b:container>
+            <b:form id="createNewCosmeticForm">
+                
+                <h:outputLabel value="#{msg['cosmetic.orderNb']}:*" for="orderNb"/>
+                <b:inputText id="orderNb" value="#{createCosmeticBean.newCosmetic.orderNb }" required="true"/><br/>
+                <b:messages for="orderNb"/>
+                
+                <h:outputLabel value="#{msg['cosmetic.name']}: *" for="name"/>
+                <b:inputText id="name" value="#{createCosmeticBean.newCosmetic.name}"  required="true" /><br/>
+                <b:messages for="name" class="error" errorStyle="color:red"/>
+
+                <h:outputLabel value="#{msg['cosmetic.categoryChoice']}: *" for="categoryName"/>
+                <b:selectOneMenu   value="#{createCosmeticBean.categoryName}">
+                    <f:selectItems  id="categoryName" value="#{createCosmeticBean.listCategoryDTO}" var="categoryName" itemValue="#{category.categoryName}" itemLabel="#{category.categoryName}" />
+                </b:selectOneMenu><br/>
+                <b:message for="categoryName"/><br />
+                
+                
+                <h:outputLabel value="#{msg['cosmetic.composition']}: *" for="composition"/>
+                <b:inputText id="composition" value="#{createCosmeticBean.newCosmetic.composition}" required="true"/><br/>
+                <b:messages for="composition" class="error" errorStyle="color:red"/>
+
+                
+                <b:commandButton value="#{msg['action.create']}" action="#{createCosmeticBean.confirmCosmetic()}" />
+                <b:commandButton value="#{msg['action.cancel']}" action="#{createCosmeticBean.abort()}" immediate="true"/>
+            </b:form>
+        </b:container>
+    </ui:define>
+</ui:composition>

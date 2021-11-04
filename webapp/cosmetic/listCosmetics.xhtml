@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition   xmlns="http://www.w3.org/1999/xhtml"
+                  xmlns:ui="http://java.sun.com/jsf/facelets" 
+
+                  template="../templates/MainTemplate.xhtml"
+                  xmlns:b="http://bootsfaces.net/ui"
+                  xmlns:h="http://java.sun.com/jsf/html"
+                  xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="top">
+        <b:container fluid="true">
+            <b:row>
+                <ui:include src="../templates/menu.xhtml" />
+            </b:row>
+        </b:container>
+    </ui:define>
+
+    <ui:define name="content">
+        <b:container fluid="true">
+            <h2 align="center" style="color: navy; font-size:18px">${msg['cosmetic.listAll']}</h2>
+            <b:column>
+                <b:form id = "listCosmeticsForm">
+                    <b:commandButton style="background-color: thistle" iconAwesome="refresh" action="#{listCosmeticsBean.init()}" />
+                    <b:commandButton style="background-color: thistle; font-weight: bold" value="${msg['cosmetic.create']}" action="#{createCosmeticBean.begin()}" 
+                                     immediate="true" rendered="#{request.isUserInRole('Sales')}"/>
+                    <br/>
+                    <br/>
+                    <b:dataTable  var="row" value="#{listCosmeticsBean.cosmetics}" >
+                        <h:column id="orderNb">
+                            <f:facet name="header">${msg['cosmetic.orderNb']}</f:facet>
+                            <h:outputText value="#{row.orderNb}"/>
+                        </h:column>
+                        <h:column id="name">
+                            <f:facet name="header">${msg['cosmetic.name']}</f:facet>
+                            <h:outputText value="#{row.name}"/>
+                        </h:column>
+                        <h:column id="category">
+                            <f:facet name="header">${msg['cosmetic.categoryChoice']}</f:facet>
+                            <h:outputText value="#{row.category.getCategoryName()}"/>
+                        </h:column>
+                        <h:column id="composition">
+                            <f:facet name="header">${msg['cosmetic.composition']}</f:facet>
+                            <h:outputText value="#{row.composition}"/>
+                        </h:column>
+                        <h:column id="createdBy">
+                            <f:facet name="header">${msg['cosmetic.createdBy']}</f:facet>
+                            <h:outputText value="#{row.createdBy.salesStamp}"/>
+                        </h:column>
+                        <h:column id="assesedBy">
+                            <f:facet name="header">${msg['cosmetic.assessedBy']}</f:facet>
+                            <h:outputText value="#{row.assessedBy.assessorStamp}"/>
+                            <h:commandButton action="#{listCosmeticsBean.chooseCosmetic(row, contextUtils.getUserName())}" value="${msg['cosmetic.get']}" rendered="#{request.isUserInRole('Assessor') and not row.assessed}"/>
+                            
+                            <h:commandButton action="#{listCosmeticsBean.resignFromCosmetic(row)}" value="${msg['cosmetic.resign']}" rendered="#{request.isUserInRole('Assessor') and row.assessed}"/>
+                        </h:column>
+                        <h:column id="actions">
+                            <f:facet name="header">Akcje</f:facet>
+                            <b:commandButton iconAwesome="trash" action="#{listCosmeticsBean.showDetailsForDeletion(row)}" 
+                                             rendered="#{request.isUserInRole('Sales')}"/>
+                            <b:commandButton value="${msg['action.edit']}" action="#{listCosmeticsBean.edit(row)}" 
+                                             rendered="#{request.isUserInRole('Sales')}"/>
+                            <b:commandButton value="${msg['action.showDetails']}" action="#{listCosmeticsBean.showDetails(row)}" />
+                        </h:column>
+                    </b:dataTable>
+                </b:form>
+            </b:column>
+        </b:container>
+    </ui:define>
+
+</ui:composition>
+

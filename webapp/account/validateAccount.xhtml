@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="../templates/MainTemplate.xhtml"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="top">
+        <b:container>
+            <b:row style="background: thistle">
+                <h1 align="center" style="color: black">Zweryfikuj konto</h1>
+            </b:row>
+        </b:container>
+    </ui:define>
+
+    <ui:define name="left">
+        <ui:include src="../templates/menu.xhtml" />
+    </ui:define>
+
+    <ui:define name="content">
+        <b:container>
+            <b:form>
+
+                Login: <h:outputText id="login" value="#{validateAccountBean.validatedAccount.login}"/><br />
+                Imie: <h:outputText id="name" value="#{validateAccountBean.validatedAccount.name}"/><h:message for="name"/><br />
+                Nazwisko: <h:outputText id="surname" value="#{validateAccountBean.validatedAccount.surname}"/><h:message for="surname"/><br />
+                Email: <h:outputText id="email" value="#{validateAccountBean.validatedAccount.email}"/><h:message for="email"/><br />
+                Numer telefonu: <h:outputText id="phone" value="#{validateAccountBean.validatedAccount.phone}"/><h:message for="phone"/><br />
+                <b:selectOneMenu value="#{validateAccountBean.validatedAccount.type}">
+                    <f:selectItem itemLabel="(Proszę wybrać)" itemValue="" />
+                    <f:selectItem itemLabel="Administrator" itemValue="Administrator" />
+                    <f:selectItem itemLabel="Safety Assessor" itemValue="Assessor" />
+                    <f:selectItem itemLabel="Handlowiec" itemValue="Sales" />
+                    <f:selectItem itemLabel="Laborant" itemValue="LabTechnician" />
+                </b:selectOneMenu><br/>
+
+
+
+                <b:commandButton value="OK" action="#{validateAccountBean.saveValidatedAccount(contextUtils.getUserName())}" />
+                <b:commandButton value="Porzuć" action="#{validateAccountBean.abort()}" immediate="true"/>
+            </b:form>
+        </b:container>
+
+    </ui:define>
+</ui:composition>
+
+

@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition   xmlns="http://www.w3.org/1999/xhtml"
+                  xmlns:ui="http://java.sun.com/jsf/facelets" 
+
+                  template="../templates/MainTemplate.xhtml"
+                  xmlns:b="http://bootsfaces.net/ui"
+                  xmlns:h="http://java.sun.com/jsf/html"
+                  xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="top">
+        <b:container fluid="true">
+            <b:row>
+                <ui:include src="../templates/menu.xhtml" />
+            </b:row>
+        </b:container>
+    </ui:define>
+
+    <ui:define name="content">
+        <b:container fluid="true">
+            <h2 align="center" style="color: navy; font-size:18px">${msg['category.list']}</h2>
+            <b:column>
+                <b:form>
+                    <b:commandButton style="background-color: thistle" iconAwesome="refresh" action="#{listCategoriesBean.init()}" />
+                    <b:commandButton style="background-color: thistle; font-weight: bold" value="Utwórz kategorię" action="#{createCategoryBean.begin()}" immediate="true"/>
+                    <br/>
+                    <br/>
+                    <b:dataTable  var="row" value="#{listCategoriesBean.categories}" >
+
+                        <h:column id="name">
+                            <f:facet name="header">${msg['category.name']}</f:facet>
+                            <h:outputText value="#{row.categoryName}"/>
+                        </h:column>
+
+                        <h:column id="analysis">
+                            <f:facet name="header">${msg['category.demandedAnalysis']}</f:facet>
+                            <h:outputText value="#{row.getDemandsAnalysisString()}"/>
+                        </h:column>
+
+                        <h:column id="actions">
+                            <f:facet name="header">${msg['category.edit']}</f:facet>
+                            <b:commandButton iconAwesome="pencil"  action="#{listAnalysisBean.edit(row)}" />
+
+                        </h:column>
+                    </b:dataTable>
+                </b:form>
+            </b:column>
+        </b:container>
+    </ui:define>
+
+</ui:composition>
+

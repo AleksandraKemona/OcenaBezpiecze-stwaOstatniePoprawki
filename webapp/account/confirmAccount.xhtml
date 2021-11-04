@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="../templates/MainTemplate.xhtml"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="top">
+        <b:container>
+            <b:row style="background: thistle">
+                <h1 align="center" style="color: black">${msg['account.confirm']}</h1>
+            </b:row>
+        </b:container>
+    </ui:define>
+
+    <ui:define name="left">
+        <ui:include src="../templates/menu.xhtml" />
+    </ui:define>
+
+    <ui:define name="content">
+        <b:container>
+            <b:form>
+                
+                ${msg['account.login']} *: <h:outputText id="login" value="#{createAccountBean.newAccount.login}"/><br />
+                <h:message for="login"/><br />
+                ${msg['account.name']}: <h:outputText id="name" value="#{createAccountBean.newAccount.name}"/><h:message for="name"/><br />
+                ${msg['account.surname']}: <h:outputText id="surname" value="#{createAccountBean.newAccount.surname}"/><h:message for="surname"/><br />
+                ${msg['account.email']}: <h:outputText id="email" value="#{createAccountBean.newAccount.email}"/><h:message for="email"/><br />
+                ${msg['account.phone']}: <h:outputText id="phone" value="#{createAccountBean.newAccount.phone}"/><h:message for="phone"/><br />
+                ${msg['account.question']}: <h:outputText id="question" value="#{createAccountBean.newAccount.question}"/><h:message for="question"/><br />
+                ${msg['account.answer']}: <h:outputText id="answer" value="#{createAccountBean.newAccount.answer}"/><h:message for="answer"/><br />
+                
+                
+                <b:commandButton value="${msg['action.confirm']}" action="#{createAccountBean.createAccount}" />
+                <b:commandButton value="${msg['action.cancel']}" action="#{createAccountBean.abort()}" immediate="true"/>
+            </b:form>
+        </b:container>
+
+    </ui:define>
+</ui:composition>
+
+

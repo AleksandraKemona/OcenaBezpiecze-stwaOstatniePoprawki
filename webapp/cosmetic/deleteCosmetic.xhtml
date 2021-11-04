@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets" 
+                template="../templates/MainTemplate.xhtml"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="top">
+        <b:container>
+            <b:row style="background: thistle">
+                <h1 align="center" style="color: black">${msg['cosmetic.confirmDelete']}</h1>
+            </b:row>
+        </b:container>
+    </ui:define>
+
+    <ui:define name="left">
+        <ui:include src="../templates/menu.xhtml" />
+    </ui:define>
+
+    <ui:define name="content">
+        <b:container>
+            
+            <h:form id="deleteCosmeticForm" style="font-size: 18px;">
+                <h:messages globalOnly="true" style="color: red; font-size: 15px;" styleClass="error_large" />
+                <h:outputText style="font-size: 18px; font-weight: bold" value="${msg['cosmetic.orderNb']}:"/><br/>
+                <h:outputText id="orderNb" value="#{deleteCosmeticBean.cosmeticForDeletion.orderNb}"/><br/><br/>
+                
+                <h:outputText style="font-size: 18px; font-weight: bold" value="${msg['cosmetic.name']}:"/><br/>
+                <h:outputText id="name" value="#{deleteCosmeticBean.cosmeticForDeletion.name}"/><br/><br/>
+                
+                <h:outputText style="font-size: 18px; font-weight: bold" value="${msg['cosmetic.categoryChoice']}:"/><br/>
+                <h:outputText id="categoryName" value="#{deleteCosmeticBean.cosmeticForDeletion.category.categoryName}"/><br/><br/>
+                
+                <h:outputText style="font-size: 18px; font-weight: bold" value="${msg['cosmetic.composition']}:"/><br/>
+                <h:outputText id="composition" value="#{deleteCosmeticBean.cosmeticForDeletion.composition}"/><br/><br/>
+                <b:commandButton value="${msg['cosmetic.confirmDelete']}" action="#{deleteCosmeticBean.confirmDeleteCosmetic(cosmeticForDeletion)}" />
+                <b:commandButton value="${msg['action.cancel']}" action="#{deleteCosmeticBean.abort()}" immediate="true"/>
+            </h:form>
+        </b:container>
+    </ui:define>
+</ui:composition>
+
+
+

@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition   xmlns="http://www.w3.org/1999/xhtml"
+                  xmlns:ui="http://java.sun.com/jsf/facelets" 
+
+                  template="../templates/MainTemplate.xhtml"
+                  xmlns:b="http://bootsfaces.net/ui"
+                  xmlns:h="http://java.sun.com/jsf/html"
+                  xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="top">
+        <b:container fluid="true">
+            <b:row>
+                <ui:include src="../templates/menu.xhtml" />
+            </b:row>
+        </b:container>
+    </ui:define>
+
+
+    <ui:define name="content">
+        <b:container fluid="true">
+            <h2 align="center" style="color: navy; font-size:18px">${msg['account.list']}</h2>
+            <b:column>
+                <b:form>
+                    <b:commandButton value="Strona główna" action="main" immediate="true"/>
+                    <b:commandButton style="background-color: thistle" iconAwesome="refresh" action="#{listAccountsBean.init()}" />
+
+                    <br/>
+                    <br/>
+                    <b:dataTable  var="row" value="#{listAccountsBean.accounts}" >
+
+                        <h:column id="orderNb">
+                            <f:facet name="header">${msg['account.login']}</f:facet>
+                            <h:outputText value="#{row.login}"/>
+                        </h:column>
+
+                        <h:column id="name">
+                            <f:facet name="header">${msg['account.name']}</f:facet>
+                            <h:outputText value="#{row.name}"/>
+                        </h:column>
+
+                        <h:column id="surname">
+                            <f:facet name="header">${msg['account.surname']}</f:facet>
+                            <h:outputText value="#{row.surname}"/>
+                        </h:column>
+                        
+                        <h:column id="email">
+                            <f:facet name="header">${msg['account.email']}</f:facet>
+                            <h:outputText value="#{row.email}"/>
+                        </h:column>
+                        
+                        <h:column id="type">
+                            <f:facet name="header">${msg['account.type']}</f:facet>
+                            <h:outputText value="#{row.type}"/>
+                        </h:column>
+
+                        <h:column id="verifiedBy">
+                            <f:facet name="header">${msg['account.confirmedBy']}</f:facet>
+                            <h:outputText value="#{row.verifiedBy.getAdminStamp()}"/>
+                            <h:commandButton action="#{listAccountsBean.validateAccount(row)}" value="${msg['account.validate']}" rendered="#{not row.confirmed}"/>
+                        </h:column>
+
+                        
+
+                        <h:column id="isActive">
+                            <f:facet name="header">${msg['account.active']}</f:facet>
+                            <h:selectBooleanCheckbox id="active" value="#{row.active}" disabled="true"/>   
+                            
+                        </h:column>
+
+                        <h:column id="actions">
+                            <f:facet name="header">Akcje</f:facet>
+                            <h:commandButton action="#{listAccountsBean.activate(row)}" value="${msg['action.activate']}" rendered="#{not row.active and row.confirmed}"/>
+                            <h:commandButton action="#{listAccountsBean.deactivate(row)}" value="${msg['action.deactivate']}" rendered="#{row.active}"/>
+                            <b:commandButton value="${msg['action.edit']}" action="#{listAccountsBean.editUserAccount(row)}" />
+                            
+                        </h:column>
+                    </b:dataTable>
+
+
+                </b:form>
+            </b:column>
+        </b:container>
+    </ui:define>
+
+</ui:composition>
+
