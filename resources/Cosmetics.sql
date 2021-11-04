@@ -1,0 +1,4 @@
+-- INSERT INTO COSMETICS (cosmetic_id, assessed_by, composition, created_by, last_modified, name, order_nb, version, category_id, toxicology_id) VALUES (-1, -1, 'Aqua, Glycerin, Cetearyl Alcohol', -1, '2021-06-20 10:18:14', 'Krem A', 123556, 1, -1, null); 
+-- INSERT INTO COSMETICS (cosmetic_id, assessed_by, composition, created_by, last_modified, name, order_nb, version, category_id, toxicology_id) VALUES (-2, -1, 'Aqua, Cetearyl Alcohol', -1, '2021-06-20 10:18:14', 'Tonik A', 123556, 1, -2, null); 
+
+INSERT INTO SAFETY.ACCOUNTS (id,version,last_modified,TYPE, LOGIN, PASSWORD, NAME, SURNAME, EMAIL, PHONE, VERIFIEDBY) VALUES (-5,1,'2021-06-27 10:18:14','UNCONFIRMED', 'assessor3', '1c142b2d01aa34e9a36bde480645a57fd69e14155dacfab5a3f9257b77fdc8d8', 'Magdalena', 'Jabłczyńska','magdalena.jabłczyńska@mail.com', '285671034', null);

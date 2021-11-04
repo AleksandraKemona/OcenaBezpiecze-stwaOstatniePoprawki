@@ -1,0 +1,6 @@
+INSERT INTO SAFETY.SUBSTRATES (substrate_id,version,last_modified,SUBSTRATE_NAME, SUBSTRATE_DESCRIPTION) VALUES (-1,1,'2021-06-27 10:18:14','Aqua', 'rozpuszczalnik');
+INSERT INTO SAFETY.SUBSTRATES (substrate_id,version,last_modified,SUBSTRATE_NAME, SUBSTRATE_DESCRIPTION) VALUES (-2,1,'2021-06-28 10:18:14','Glycerin', 'rozpuszczalnik');
+INSERT INTO SAFETY.SUBSTRATES (substrate_id,version,last_modified,SUBSTRATE_NAME, SUBSTRATE_DESCRIPTION) VALUES (-3,1,'2021-06-29 10:18:14','AlcoholDenat', 'rozpuszczalnik');
+INSERT INTO SAFETY.SUBSTRATES (substrate_id,version,last_modified,SUBSTRATE_NAME, SUBSTRATE_DESCRIPTION) VALUES (-4,1,'2021-06-22 10:18:14','Isopropyl Myristate', 'rozpuszczalnik');
+INSERT INTO SAFETY.SUBSTRATES (substrate_id,version,last_modified,SUBSTRATE_NAME, SUBSTRATE_DESCRIPTION) VALUES (-5,1,'2021-06-21 10:18:14','Cetearyl Alcohol', 'rozpuszczalnik');
+INSERT INTO SAFETY.SUBSTRATES (substrate_id,version,last_modified,SUBSTRATE_NAME, SUBSTRATE_DESCRIPTION) VALUES (-6,1,'2021-06-20 10:18:14','Xantan Gum', 'emulgator');

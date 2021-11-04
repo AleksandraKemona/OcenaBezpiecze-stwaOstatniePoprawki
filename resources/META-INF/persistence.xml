@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_0.xsd">
+  <persistence-unit name="SafetyAssessementPU" transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>java:app/jdbc/SafetyAssessementDS</jta-data-source>
+    <class>pl.lodz.p.it.spjava.e11.sa.entity.Cosmetic</class>
+    <class>pl.lodz.p.it.spjava.e11.sa.entity.Toxicology</class>
+    <class>pl.lodz.p.it.spjava.e11.sa.entity.Analysis</class>
+    <class>pl.lodz.p.it.spjava.e11.sa.entity.Category</class>
+    <class>pl.lodz.p.it.spjava.e11.sa.entity.Substrate</class>
+    <class>pl.lodz.p.it.spjava.e11.sa.entity.Account</class>
+    <class>pl.lodz.p.it.spjava.e11.sa.entity.Administrator</class>
+    <class>pl.lodz.p.it.spjava.e11.sa.entity.Assessor</class>
+    <class>pl.lodz.p.it.spjava.e11.sa.entity.LabTechnician</class>
+    <class>pl.lodz.p.it.spjava.e11.sa.entity.Sales</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <shared-cache-mode>NONE</shared-cache-mode>
+    <validation-mode>NONE</validation-mode>
+    <properties>
+      <!--        <property name="toplink.ddl-generation" value="create-tables">true</property>-->
+      <property name="eclipselink.canonicalmodel.subpackage" value="SafetyAssessementPU"/>
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <property name="eclipselink.logging.level" value="FINE"/>
+      <!--      <property name="toplink.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>-->
+    </properties>
+  </persistence-unit>
+</persistence>
