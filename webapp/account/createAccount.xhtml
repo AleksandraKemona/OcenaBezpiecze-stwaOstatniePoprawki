@@ -21,11 +21,10 @@
 
     <ui:define name="content">
         <b:container>
-            <b:form id="createAccount">
+            <b:form id="createAccountForm">
                 <h:messages globalOnly="true" styleClass="error_large" />
                 
                 ${msg['account.login']} *: <h:inputText id="login" value="#{createAccountBean.newAccount.login}" required="true">
-<!--                    <f:validateLength minimum="6" maximum="32" />-->
                 </h:inputText>
                 <h:message for="login" class="error" errorStyle="color:red"/> <br />
                 ${msg['account.password']} *: <h:inputSecret id="password" value="#{createAccountBean.newAccount.password}" required="true"/>

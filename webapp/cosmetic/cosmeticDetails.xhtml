@@ -59,7 +59,8 @@
 
 
                 <b:commandButton value="${msg['toxicology.generate']}" action="#{createToxicologyBean.createToxicology(cosmeticDetailsBean.getAppliedSubstrates(), cosmeticDetailsBean.getDescribedCosmeticId())}" immediate="true"                             
-                                 rendered="#{request.isUserInRole('Assessor') and not cosmeticDetailsBean.showedCosmetic.hasToxicology}"/>
+                                 rendered="#{request.isUserInRole('Assessor') and cosmeticDetailsBean.showedCosmetic.assessed
+                                             and not cosmeticDetailsBean.showedCosmetic.hasToxicology}"/>
                 <b:dataTable  excel="true" pdf="true" lengthChange="false" var="row" searching="false" paginated="false" info="false"
                               value="#{cosmeticDetailsBean.showedCosmetic.toxicology.describedBy}" rendered="#{cosmeticDetailsBean.showedCosmetic.hasToxicology}" >
                 <h:column id="Substrate">

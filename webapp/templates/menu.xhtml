@@ -17,7 +17,7 @@
 
                     <f:subview id="admin" rendered="#{request.isUserInRole('Administrator')}">
                         <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold" iconAwesome="list" value="${msg['menu.adminPanel']}" href="#" action="listAccounts"></b:navCommandLink>           
-                        <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold" iconAwesome="user-plus" value="${msg['admin.createUserAccount']}" href="#" action="createAccount"></b:navCommandLink>  
+                        <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold" iconAwesome="user-plus" value="${msg['admin.createUserAccount']}" href="#" action="#{createAccountBean.init()}"></b:navCommandLink>  
                     </f:subview>
 
                     <f:subview id="assessor" rendered="#{request.isUserInRole('Assessor')}">
@@ -56,7 +56,8 @@
                     </f:subview>
                     <f:subview id="menuKontoLoggedIn" rendered="#{not empty request.remoteUser}">
                         <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold"  value="${contextUtils.getUserName()}" />
-                        <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold" iconAwesome="cog" value="${msg['account.details']}" action="#{listAccountsBean.showMyAccountDetails(contextUtils.getUserName())}" />
+                        <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold" iconAwesome="cog" value="${msg['account.details']}" 
+                                          action="#{listAccountsBean.showMyAccountDetails(contextUtils.getUserName())}" />
                         <b:navCommandLink style="color: navy; font-size: 18px; font-weight: bold" iconAwesome="sign-out" value="${msg['action.logout']}" action="#{logoutBean.logout()}" />
                     </f:subview>
                 </b:navbarLinks>

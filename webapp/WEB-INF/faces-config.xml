@@ -160,6 +160,20 @@
         </navigation-case>
         
         <navigation-case>
+            <from-outcome>loginError</from-outcome>
+            <to-view-id>/login/formLoginError.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>formNotActiveError</from-outcome>
+            <to-view-id>/login/formNotActiveError.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        
+        
+        
+        <navigation-case>
             <from-outcome>resetPasswordRequest</from-outcome>
             <to-view-id>/account/resetPasswordRequest.xhtml</to-view-id>
             <redirect />

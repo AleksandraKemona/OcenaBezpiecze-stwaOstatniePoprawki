@@ -42,7 +42,7 @@
                 </b:selectOneMenu><br/>
                 
                 <b:commandButton value="${msg['action.confirm']}" action="#{editAccountBean.saveUserAccount()}" />
-                <b:commandButton value="${msg['action.cancel']}" action="#{createAccountBean.abort()}" immediate="true"/>
+                <b:commandButton value="${msg['action.cancel']}" action="#{editAccountBean.abortUser()}" immediate="true"/>
             </b:form>
         </b:container>
     </ui:define>

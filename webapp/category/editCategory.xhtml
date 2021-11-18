@@ -17,7 +17,7 @@
 
     <ui:define name="content">
         <b:container>
-            <h:form id="editCategory" style="font-size: 18px;">
+            <h:form id="editCategoryForm" style="font-size: 18px;">
                 ${msg['category.name']} *: <b:inputText id="name" value="#{editCategoryBean.editedCategory.categoryName}"/><h:message for="name"/><br />
             
                 ${msg['category.demandedAnalysis']} *: <h:outputText id="analysis" value="#{editCategoryBean.editedCategory.demandsAnalysisString}" /><h:message for="composition"/><br/>

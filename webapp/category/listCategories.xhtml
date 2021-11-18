@@ -20,9 +20,9 @@
         <b:container fluid="true">
             <h2 align="center" style="color: navy; font-size:18px">${msg['category.list']}</h2>
             <b:column>
-                <b:form>
+                <b:form id="listCategoriesForm">
                     <b:commandButton style="background-color: thistle" iconAwesome="refresh" action="#{listCategoriesBean.init()}" />
-                    <b:commandButton style="background-color: thistle; font-weight: bold" value="Utwórz kategorię" action="#{createCategoryBean.begin()}" immediate="true"/>
+                    <b:commandButton style="background-color: thistle; font-weight: bold" value="${msg['category.create']}" action="#{createCategoryBean.begin()}" immediate="true"/>
                     <br/>
                     <br/>
                     <b:dataTable  var="row" value="#{listCategoriesBean.categories}" >
@@ -39,7 +39,7 @@
 
                         <h:column id="actions">
                             <f:facet name="header">${msg['category.edit']}</f:facet>
-                            <b:commandButton iconAwesome="pencil"  action="#{listAnalysisBean.edit(row)}" />
+                            <b:commandButton iconAwesome="pencil"  action="#{listCategoriesBean.edit(row)}" />
 
                         </h:column>
                     </b:dataTable>

@@ -3,7 +3,8 @@
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets" 
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:b="http://bootsfaces.net/ui"
-                template="/templates/MainTemplate.xhtml">
+                template="/templates/MainTemplate.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="top" >
         <b:container fluid="true">
@@ -20,8 +21,12 @@
     </ui:define>
 
     <ui:define name="content" class="index_content" >
+        
         <h1 align="center" style="color: navy">${msg['index.message']}</h1>
         <center><img  src="resources/images/background.jpg" width="width" height="60%" alt="alt"/></center>
+        
+            
+            
     </ui:define>
 
 </ui:composition>

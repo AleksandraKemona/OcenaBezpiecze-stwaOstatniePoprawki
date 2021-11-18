@@ -5,8 +5,7 @@
                   template="../templates/MainTemplate.xhtml"
                   xmlns:b="http://bootsfaces.net/ui"
                   xmlns:h="http://java.sun.com/jsf/html"
-                  xmlns:f="http://java.sun.com/jsf/core"
-                  xmlns:jsf="http://xmlns.jcp.org/jsf">
+                  xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:define name="top">
         <b:container fluid="true">
@@ -18,22 +17,16 @@
 
     <ui:define name="content">
         <b:container fluid="true" >
-
-            
-            <form jsf:id="loginForm">
-            <p><strong>${msg['account.login']} </strong><input jsf:id="username" type="text" jsf:value="#{loginController.username}" /></p>
-            <b:message for="username"/>
-            <p><strong>${msg['account.password']} </strong><input jsf:id="password" type="password" jsf:value="#{loginController.password}" /></p>
-            <b:message for="password"/>
-            <p><input type="submit" value="${msg['action.login']}" jsf:action="#{loginController.login()}" /></p>
-        </form>
+            <form>
+                ${msg['account.notActive']}
+                
+                
+            </form>
 
 
         </b:container>
     </ui:define>
 
 </ui:composition>
-
-
 
 

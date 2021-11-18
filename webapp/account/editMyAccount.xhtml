@@ -10,7 +10,7 @@
     <ui:define name="top">
         <b:container>
             <b:row style="background: thistle">
-                <h1 align="center" style="color: black">${msg['account.editUser']}</h1>
+                <h1 align="center" style="color: black">${msg['account.edit']}</h1>
             </b:row>
         </b:container>
     </ui:define>
@@ -23,26 +23,34 @@
         <b:container>
             <b:form id="createAccount">
                 ${msg['account.login']} *: <h:inputText id="login" value="#{editAccountBean.editedAccount.login}" required="true">
-                    <f:validateLength minimum="3" maximum="32" />
-                </h:inputText><h:message for="login"/> <br />
-                 Stare hasło*: <h:inputSecret id="oldPassword" value="#{editAccountBean.editedAccount.password}" required="true"/>
-                <h:message for="password" class="error" errorStyle="color:red"/><br />
+                    
+                </h:inputText>
+                <b:message for="login"/> <br />
+                ${msg['account.oldPassword']} <h:inputSecret id="oldPassword" value="#{editAccountBean.editedAccount.password}" required="true"/>
+                <b:message for="oldPassword"/><br />
                 
                 ${msg['account.password']} *: <h:inputSecret id="password" value="#{editAccountBean.editedAccount.newPassword}"/>
-                <h:message for="password" class="error" errorStyle="color:red"/><br />
+                <b:message for="password" /><br />
                 ${msg['account.passwordRepeat']} *: <h:inputSecret id="repeatPassword" value="#{editAccountBean.repeatPassword}"/>
-                <h:message for="repeatPassword" class="error" errorStyle="color:red"/><br />
-                ${msg['account.name']} <h:inputText id="name" value="#{editAccountBean.editedAccount.name}"/><h:message for="name"/><br />
-                ${msg['account.surname']} <h:inputText id="surname" value="#{editAccountBean.editedAccount.surname}"/><h:message for="surname"/><br />
-                ${msg['account.email']} <h:inputText id="email" value="#{editAccountBean.editedAccount.email}"/><h:message for="email"/><br />
-                ${msg['account.phone']}: <h:inputText id="phone" value="#{editAccountBean.editedAccount.phone}"/><h:message for="phone"/><br />
-                ${msg['account.phone']}: <h:inputText id="question" value="#{editAccountBean.editedAccount.question}"/><h:message for="phone"/><br />
-                ${msg['account.phone']}: <h:inputText id="answer" value="#{editAccountBean.editedAccount.answer}"/><h:message for="phone"/><br />
-                ${msg['account.phone']}: <h:inputText id="newAnswer" value="#{editAccountBean.editedAccount.newAnswer}"/><h:message for="phone"/><br />
+                <b:message for="repeatPassword" class="error" errorStyle="color:red"/><br />
+                ${msg['account.name']} <h:inputText id="name" value="#{editAccountBean.editedAccount.name}"/>
+                <b:message for="name"/><br />
+                ${msg['account.surname']} <h:inputText id="surname" value="#{editAccountBean.editedAccount.surname}"/>
+                <b:message for="surname"/><br />
+                ${msg['account.email']} <h:inputText id="email" value="#{editAccountBean.editedAccount.email}"/>
+                <b:message for="email"/><br />
+                ${msg['account.phone']}: <h:inputText id="phone" value="#{editAccountBean.editedAccount.phone}"/>
+                <b:message for="phone"/><br />
+                ${msg['account.question']}: <h:inputText id="question" value="#{editAccountBean.editedAccount.question}"/>
+                <b:message for="question"/><br />
+                ${msg['account.answer']}: <h:inputText id="answer" value="#{editAccountBean.editedAccount.answer}"/>
+                <b:message for="answer"/><br />
+                ${msg['account.newAnswer']}: <h:inputText id="newAnswer" value="#{editAccountBean.editedAccount.newAnswer}"/>
+                <b:message for="newAnswer"/><br />
                 
                 
-                <b:commandButton value="${msg['action.confirm']}" action="#{editAccountBean.saveMyAccount()}" />
-                <b:commandButton value="${msg['action.cancel']}" action="#{createAccountBean.abort()}" immediate="true"/>
+                <b:commandButton value="${msg['action.confirm']}" action="#{editAccountBean.saveMyAccount(contextUtils.getUserName())}" />
+                <b:commandButton value="${msg['action.cancel']}" action="#{editAccountBean.abortMy()}" immediate="true"/>
             </b:form>
         </b:container>
     </ui:define>

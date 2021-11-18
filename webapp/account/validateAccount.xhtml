@@ -10,36 +10,29 @@
     <ui:define name="top">
         <b:container>
             <b:row style="background: thistle">
-                <h1 align="center" style="color: black">Zweryfikuj konto</h1>
+                <h1 align="center" style="color: black">${msg['account.verify']}</h1>
             </b:row>
         </b:container>
     </ui:define>
 
-    <ui:define name="left">
-        <ui:include src="../templates/menu.xhtml" />
-    </ui:define>
-
     <ui:define name="content">
         <b:container>
-            <b:form>
+            <b:form id = "validateAccountForm">
 
-                Login: <h:outputText id="login" value="#{validateAccountBean.validatedAccount.login}"/><br />
-                Imie: <h:outputText id="name" value="#{validateAccountBean.validatedAccount.name}"/><h:message for="name"/><br />
-                Nazwisko: <h:outputText id="surname" value="#{validateAccountBean.validatedAccount.surname}"/><h:message for="surname"/><br />
-                Email: <h:outputText id="email" value="#{validateAccountBean.validatedAccount.email}"/><h:message for="email"/><br />
-                Numer telefonu: <h:outputText id="phone" value="#{validateAccountBean.validatedAccount.phone}"/><h:message for="phone"/><br />
+                ${msg['account.login']} *: <h:outputText id="login" value="#{validateAccountBean.validatedAccount.login}"/><br />
+                ${msg['account.name']} *: <h:outputText id="name" value="#{validateAccountBean.validatedAccount.name}"/><h:message for="name"/><br />
+                ${msg['account.surname']} *: <h:outputText id="surname" value="#{validateAccountBean.validatedAccount.surname}"/><h:message for="surname"/><br />
+                ${msg['account.email']} *: <h:outputText id="email" value="#{validateAccountBean.validatedAccount.email}"/><h:message for="email"/><br />
+                ${msg['account.phone']} *: <h:outputText id="phone" value="#{validateAccountBean.validatedAccount.phone}"/><h:message for="phone"/><br />
                 <b:selectOneMenu value="#{validateAccountBean.validatedAccount.type}">
-                    <f:selectItem itemLabel="(Proszę wybrać)" itemValue="" />
-                    <f:selectItem itemLabel="Administrator" itemValue="Administrator" />
-                    <f:selectItem itemLabel="Safety Assessor" itemValue="Assessor" />
-                    <f:selectItem itemLabel="Handlowiec" itemValue="Sales" />
-                    <f:selectItem itemLabel="Laborant" itemValue="LabTechnician" />
+                    <f:selectItem itemLabel="${msg['account.chooseType']}" itemValue="" />
+                    <f:selectItem itemLabel="${msg['account.admin']}" itemValue="Administrator" />
+                    <f:selectItem itemLabel="${msg['account.assessor']}" itemValue="Assessor" />
+                    <f:selectItem itemLabel="${msg['account.sales']}" itemValue="Sales" />
+                    <f:selectItem itemLabel="${msg['account.lab']}" itemValue="LabTechnician" />
                 </b:selectOneMenu><br/>
-
-
-
-                <b:commandButton value="OK" action="#{validateAccountBean.saveValidatedAccount(contextUtils.getUserName())}" />
-                <b:commandButton value="Porzuć" action="#{validateAccountBean.abort()}" immediate="true"/>
+                <b:commandButton value="${msg['action.confirm']}" action="#{validateAccountBean.saveValidatedAccount(contextUtils.getUserName())}" />
+                <b:commandButton value="${msg['action.cancel']}" action="#{validateAccountBean.abort()}" immediate="true"/>
             </b:form>
         </b:container>
 

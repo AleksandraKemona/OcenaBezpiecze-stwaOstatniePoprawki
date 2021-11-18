@@ -21,22 +21,19 @@
 
     <ui:define name="content">
         <b:container>
-            <b:form id="editCosmetic">
+            <b:form id="createCategoryForm">
 
                 ${msg['category.name']} *: <b:inputText id="name" value="#{createCategoryBean.newCategory.categoryName}" required="true"/><br/>
-
-                
-                
+                <b:messages for="name" class="error" errorStyle="color:red"/>
                 ${msg['category.demandedAnalysis']} *: <br/>
-                <b:dataTable value="#{createCategoryBean.listAnalysisDTO}" var="demandedAnalysis" 
-                             lengthChange="false" searching="false" paginated="false" info="false">
-                    <b:dataTableColumn label = "Nazwa analizy" value="#{demandedAnalysis.name}"/>
-                    <b:dataTableColumn label ="Czy wymagana?">
+                <b:dataTable id="demandedAnalysis" value="#{createCategoryBean.listAnalysisDTO}" var="demandedAnalysis" 
+                             lengthChange="false" searching="false" paginated="false" info="false" >
+                    <b:dataTableColumn label = "${msg['category.analysisName']}" value="#{demandedAnalysis.name}"/>
+                    <b:dataTableColumn label ="${msg['category.isRequired']}">
                         <b:selectBooleanCheckbox value="#{demandedAnalysis.selected}"/>
                     </b:dataTableColumn>
                 </b:dataTable>
-
-
+                <b:messages for="demandedAnalysis" class="error" errorStyle="color:red"/>
                 <b:commandButton value="${msg['action.create']}" action="#{createCategoryBean.createCategory()}" />
                 <b:commandButton value="${msg['action.cancel']}" action="#{createCategoryBean.abort()}" immediate="true"/>
             </b:form>

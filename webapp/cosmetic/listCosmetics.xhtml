@@ -21,6 +21,7 @@
             <h2 align="center" style="color: navy; font-size:18px">${msg['cosmetic.listAll']}</h2>
             <b:column>
                 <b:form id = "listCosmeticsForm">
+                    <b:messages globalOnly="true" styleClass="error_large" />
                     <b:commandButton style="background-color: thistle" iconAwesome="refresh" action="#{listCosmeticsBean.init()}" />
                     <b:commandButton style="background-color: thistle; font-weight: bold" value="${msg['cosmetic.create']}" action="#{createCosmeticBean.begin()}" 
                                      immediate="true" rendered="#{request.isUserInRole('Sales')}"/>
@@ -53,6 +54,7 @@
                             <h:commandButton action="#{listCosmeticsBean.chooseCosmetic(row, contextUtils.getUserName())}" value="${msg['cosmetic.get']}" rendered="#{request.isUserInRole('Assessor') and not row.assessed}"/>
                             
                             <h:commandButton action="#{listCosmeticsBean.resignFromCosmetic(row)}" value="${msg['cosmetic.resign']}" rendered="#{request.isUserInRole('Assessor') and row.assessed}"/>
+                            
                         </h:column>
                         <h:column id="actions">
                             <f:facet name="header">Akcje</f:facet>
@@ -62,6 +64,7 @@
                                              rendered="#{request.isUserInRole('Sales')}"/>
                             <b:commandButton value="${msg['action.showDetails']}" action="#{listCosmeticsBean.showDetails(row)}" />
                         </h:column>
+                        
                     </b:dataTable>
                 </b:form>
             </b:column>
