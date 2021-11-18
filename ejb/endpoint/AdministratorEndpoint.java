@@ -26,7 +26,6 @@ import pl.lodz.p.it.spjava.e11.sa.exception.AccountException;
 import pl.lodz.p.it.spjava.e11.sa.exception.AppBaseException;
 import pl.lodz.p.it.spjava.e11.sa.security.HashGenerator;
 import pl.lodz.p.it.spjava.e11.sa.utils.converter.AccountsConverter;
-import pl.lodz.p.it.spjava.e11.sa.web.utils.AccountUtils;
 
 @Stateful
 @RolesAllowed({"Administrator"})

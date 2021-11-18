@@ -121,7 +121,6 @@ public class AnalysisEndpoint implements Serializable {
     public void chooseAnalsysis(final CategoryDTO categoryDTO) {
         boolean rollbackTX;
         int retryTXCounter = txRetryLimit;
-
         do {
             try {
                 categoryManager.chooseAnalysis(categoryDTO);
@@ -133,11 +132,9 @@ public class AnalysisEndpoint implements Serializable {
                         + " z komunikatem: " + ex.getMessage());
                 rollbackTX = true;
             }
-
         } while (rollbackTX && --retryTXCounter > 0);
-
         if (rollbackTX && retryTXCounter == 0) {
-            throw new IllegalStateException("przekroczono.liczbę.prób.odwołanych.transakcji"); //toDo zamienić na wyjątek aplikacyjny
+            throw new IllegalStateException("przekroczono.liczbę.prób.odwołanych.transakcji");
         }
     }
 

@@ -16,15 +16,19 @@ import pl.lodz.p.it.spjava.e11.sa.exception.AppBaseException;
 public abstract class AbstractFacade<T> {
 
     static final public String DB_UNIQUE_CONSTRAINT_FOR_SUBSTRATE_NAME
-            = "SQL211104091813570";
+            = "DBCONSTRAINT_UNIQUE_SUBSTRATE_NAME";
     static final public String DB_UNIQUE_CONSTRAINT_FOR_COSMETIC_NAME
-            = "SQL211030223404500";
+            = "DBCONSTRAINT_UNIQUE_COSMETIC_NAME";
     static final public String DB_UNIQUE_CONSTRAINT_FOR_LOGIN
-            = "SQL211024000530411";
+            = "DBCONSTRAINT_UNIQUE_LOGIN";
     static final public String DB_UNIQUE_CONSTRAINT_FOR_EMAIL
-            = "SQL211024000530410";
+            = "DBCONSTRAINT_UNIQUE_EMAIL";
     static final public String DB_UNIQUE_CONSTRAINT_FOR_ANALYSIS_NAME
-            = "SQL211024000530080";
+            = "DBCONSTRAINT_UNIQUE_ANALYSIS_NAME";
+    static final public String DB_UNIQUE_CONSTRAINT_FOR_CATEGORY_NAME
+            = "DBCONSTRAINT_UNIQUE_CATEGORY_NAME";
+    
+    
    
     
     
@@ -39,15 +43,11 @@ public abstract class AbstractFacade<T> {
     protected abstract EntityManager getEntityManager();
 
     public void create(T entity) throws AppBaseException {
-        System.out.println("-----------------------------------");
-        System.out.println("AbstractFacade entity "+entity);
         getEntityManager().persist(entity);
         
     }
 
     public void edit(T entity) throws AppBaseException{
-        System.out.println("-----------------------------------");
-        System.out.println("AbstractFacade entity Edit "+entity);
         getEntityManager().merge(entity);
     }
 

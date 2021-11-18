@@ -58,6 +58,7 @@ public class CategoryEndpoint implements Serializable {
 
     @TransactionAttribute(TransactionAttributeType.NEVER)
     public void createCategory(CategoryDTO newCategory, List<AnalysisDTO> selectedAnalysisList) throws AppBaseException {
+        
         Category category = new Category();
         category.setCategoryName(newCategory.getCategoryName());
         boolean rollbackTX;
@@ -65,9 +66,10 @@ public class CategoryEndpoint implements Serializable {
 
         do {
             try {
-                System.out.println("category w endpoint " + category);
                 categoryManager.createCategory(category, selectedAnalysisList);
                 rollbackTX = categoryManager.isLastTransactionRollback();
+            }catch(CategoryException ce){
+                throw ce;
             } catch (AppBaseException | EJBTransactionRolledbackException ex) {
                 Logger.getGlobal().log(Level.SEVERE, "Próba " + retryTXCounter
                         + " wykonania metody biznesowej zakończona wyjątkiem klasy:"
@@ -109,8 +111,7 @@ public class CategoryEndpoint implements Serializable {
         if (null == categoryState) {
             throw CategoryException.createExceptionWrongState(categoryState);
         }
-        System.out.println("--------Endpoint------------");
-        System.out.println("category State " + categoryState);
+        categoryState.setDemandsAnalysis(AnalysisConverter.createListAnalysisEntityFromDTO(categoryDTO.getDemandsAnalysis()));
         categoryState.setCategoryName(categoryDTO.getCategoryName());
 
         boolean rollbackTX;
@@ -119,7 +120,7 @@ public class CategoryEndpoint implements Serializable {
             try {
                 categoryManager.saveCategoryAfterEdition(categoryState, selectedAnalysisList);
                 rollbackTX = categoryManager.isLastTransactionRollback();
-            } catch (SubstrateException se) {
+            } catch (CategoryException se) {
                 throw se;
             } catch (AppBaseException | EJBTransactionRolledbackException ex) {
                 Logger.getGlobal().log(Level.SEVERE, "Próba " + retryTXCounter
@@ -137,14 +138,11 @@ public class CategoryEndpoint implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NEVER)
     @RolesAllowed({"Sales"})
     public void chooseCategory(CosmeticDTO cosmeticDTO, String categoryName) throws AppBaseException {
-        System.out.println("-------------Category Endpoint----------");
         Cosmetic cosmetic = new Cosmetic();
         cosmetic.setOrderNb(cosmeticDTO.getOrderNb());
         cosmetic.setName(cosmeticDTO.getName());
         cosmetic.setComposition(cosmeticDTO.getComposition());
         cosmetic.setAssessedBy(AccountsConverter.createAssessorEntityFromDTO(cosmeticDTO.getAssessedBy()));
-        System.out.println("-------------Category Endpoint po wszystkich set----------");
-        System.out.println("cosmetic " + cosmetic);
         boolean rollbackTX;
         int retryTXCounter = txRetryLimit;
         do {
@@ -162,7 +160,7 @@ public class CategoryEndpoint implements Serializable {
         } while (rollbackTX && --retryTXCounter > 0);
 
         if (rollbackTX && retryTXCounter == 0) {
-            throw new IllegalStateException("przekroczono.liczbę.prób.odwołanych.transakcji"); //toDo zamienić na wyjątek aplikacyjny
+            throw new IllegalStateException("przekroczono.liczbę.prób.odwołanych.transakcji");
         }
     }
 

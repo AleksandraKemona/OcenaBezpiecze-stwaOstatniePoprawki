@@ -66,9 +66,6 @@ public class SubstrateEndpoint implements Serializable {
             } catch (SubstrateException se) {
                 throw se;
             } catch (AppBaseException | EJBTransactionRolledbackException ex) {
-                System.out.println("----------------endpoint--------------------");
-                System.out.println("wiadomość  ABE "+ ex.getCause().getMessage());
-                System.out.println("wiadomość  ABE 2lvl"+ ex.getCause().getCause().getMessage());
                 Logger.getGlobal().log(Level.SEVERE, "Próba " + retryTXCounter
                         + " wykonania metody biznesowej zakończona wyjątkiem klasy:"
                         + ex.getClass().getName());

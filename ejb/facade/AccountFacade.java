@@ -68,19 +68,12 @@ public class AccountFacade extends AbstractFacade<Account> {
             
             final Throwable cause = ex.getCause();
             final Throwable causeCause = ex.getCause().getCause();
-            System.out.println("-----------------------fasada Create------------------------");
-            System.out.println("cause "+cause);
-            System.out.println("cause "+cause.getMessage());
-            System.out.println("causeCause "+causeCause);
-            System.out.println("causeCause "+causeCause.getMessage());
             if (cause instanceof DatabaseException
                     && causeCause.getMessage().contains(DB_UNIQUE_CONSTRAINT_FOR_LOGIN)) {
                 
                 throw AccountException.createWithDbCheckConstraintKeyLogin(entity, cause);
             }else if(cause instanceof DatabaseException
                     && causeCause.getMessage().contains(DB_UNIQUE_CONSTRAINT_FOR_EMAIL)) {
-                System.out.println("------------------fasada create email----------------------");
-                System.out.println("DB_UNIQUE_CONSTRAINT_FOR_EMAIL");
                 throw AccountException.createWithDbCheckConstraintKeyEmail(entity, cause);    
             }
 
@@ -109,12 +102,9 @@ public class AccountFacade extends AbstractFacade<Account> {
     public Account findByLogin(String login) throws AppBaseException{
         Account account= new Account();
         TypedQuery<Account> tq = em.createNamedQuery("Account.findByLogin", Account.class);
-        System.out.println("tq "+tq);
         tq.setParameter("login", login);
         try {
-
             account = tq.getSingleResult();
-
         } catch (NoResultException nre) {
             throw AccountException.createAccountDoesNotExistException(login, nre);
         }
@@ -122,10 +112,22 @@ public class AccountFacade extends AbstractFacade<Account> {
         return account;
     }
     
+    public Account findByEmail(String email) throws AppBaseException{
+        Account account= new Account();
+        TypedQuery<Account> tq = em.createNamedQuery("Account.findByEmail", Account.class);
+        tq.setParameter("email", email);
+        try {;
+            account = tq.getSingleResult();
+        } catch (NoResultException nre) {
+            throw AccountException.createAccountDoesNotExistException(email, nre);
+        }
+        em.refresh(account);
+        return account;
+    }
+    
 
 
-    @ExcludeClassInterceptors //Nie chcemy ujawniać w dziennikach skrótu hasła
-//    @RolesAllowed("AUTHENTICATOR") //"Zwykłe" role nie mają tu dostępu. Musi pośredniczyć odpowiedni endpoint opisany jako @RunAs("AUTHENTICATOR").
+    @ExcludeClassInterceptors
     public Account findLoginAndPasswordHashInActiveAndConfirmedAccounts(String login, String passwordHash
     ) {
         if (null == login || null == passwordHash || login.isEmpty() || passwordHash.isEmpty()) {
@@ -137,8 +139,6 @@ public class AccountFacade extends AbstractFacade<Account> {
         Predicate criteria = cb.conjunction();
         criteria = cb.and(criteria, cb.equal(from.get("login"), login));
         criteria = cb.and(criteria, cb.equal(from.get("password"), "passwordHash"));
-//        criteria = cb.and(criteria, cb.isTrue(from.get("isActive")));
-//        criteria = cb.and(criteria, cb.isTrue(from.get("confirmed")));
         query = query.select(from);
         query = query.where(criteria);
         TypedQuery<Account> tq = em.createQuery(query);
@@ -150,50 +150,5 @@ public class AccountFacade extends AbstractFacade<Account> {
         }
         return null;
 
-    }
-
-//    public Administrator2 findLoginAsAdministrator(String login) {
-//        CriteriaBuilder cb = em.getCriteriaBuilder();
-//        CriteriaQuery<Administrator> query = cb.createQuery(Administrator2.class);
-//        Root<Administrator> from = query.from(Administrator2.class);
-//        query = query.select(from);
-//        query = query.where(cb.equal(from.get("login"), login));
-//        TypedQuery<Administrator> tq = em.createQuery(query);
-//
-//        return tq.getSingleResult();
-//    }
-//    
-//    public Assessor findLoginAsAssessor(String login) {
-//        CriteriaBuilder cb = em.getCriteriaBuilder();
-//        CriteriaQuery<Assessor> query = cb.createQuery(Assessor.class);
-//        Root<Assessor> from = query.from(Assessor.class);
-//        query = query.select(from);
-//        query = query.where(cb.equal(from.get("login"), login));
-//        TypedQuery<Assessor> tq = em.createQuery(query);
-//
-//        return tq.getSingleResult();
-//    }
-//    
-//    public Sales findLoginAsSales(String login) {
-//        CriteriaBuilder cb = em.getCriteriaBuilder();
-//        CriteriaQuery<Sales> query = cb.createQuery(Sales.class);
-//        Root<Sales> from = query.from(Sales.class);
-//        query = query.select(from);
-//        query = query.where(cb.equal(from.get("login"), login));
-//        TypedQuery<Sales> tq = em.createQuery(query);
-//
-//        return tq.getSingleResult();
-//    }
-//    
-//    public LabTechnician findLoginAsLabTechnician(String login) {
-//        CriteriaBuilder cb = em.getCriteriaBuilder();
-//        CriteriaQuery<LabTechnician> query = cb.createQuery(LabTechnician.class);
-//        Root<LabTechnician> from = query.from(LabTechnician.class);
-//        query = query.select(from);
-//        query = query.where(cb.equal(from.get("login"), login));
-//        TypedQuery<LabTechnician> tq = em.createQuery(query);
-//
-//        return tq.getSingleResult();
-//    }
-//    
+    } 
 }

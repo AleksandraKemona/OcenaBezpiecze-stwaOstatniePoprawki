@@ -4,7 +4,7 @@ package pl.lodz.p.it.spjava.e11.sa.config;
 import java.sql.Connection;
 import javax.annotation.sql.DataSourceDefinition;
 
-@DataSourceDefinition( // Ta pula połączeń jest na potrzeby operacji realizowanych przez moduł aplikacji
+@DataSourceDefinition(
         name = "java:app/jdbc/SafetyAssessementDS",
         className = "org.apache.derby.jdbc.ClientDataSource",
         user = "safety",

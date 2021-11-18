@@ -13,6 +13,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import pl.lodz.p.it.spjava.e11.sa.dto.AccountDTO;
+import pl.lodz.p.it.spjava.e11.sa.dto.CosmeticDTO;
 import pl.lodz.p.it.spjava.e11.sa.ejb.facade.AccountFacade;
 import pl.lodz.p.it.spjava.e11.sa.ejb.facade.AdministratorFacade;
 import pl.lodz.p.it.spjava.e11.sa.ejb.facade.AssessorFacade;
@@ -22,9 +23,11 @@ import pl.lodz.p.it.spjava.e11.sa.ejb.manager.AccountManager;
 import pl.lodz.p.it.spjava.e11.sa.entity.Account;
 
 import pl.lodz.p.it.spjava.e11.sa.entity.Administrator;
+import pl.lodz.p.it.spjava.e11.sa.entity.Cosmetic;
 
 import pl.lodz.p.it.spjava.e11.sa.exception.AccountException;
 import pl.lodz.p.it.spjava.e11.sa.exception.AppBaseException;
+import pl.lodz.p.it.spjava.e11.sa.exception.CosmeticException;
 import pl.lodz.p.it.spjava.e11.sa.security.HashGenerator;
 import pl.lodz.p.it.spjava.e11.sa.utils.converter.AccountsConverter;
 
@@ -78,16 +81,34 @@ public class AccountEndpoint implements Serializable {
 
     @RolesAllowed({"Assessor", "LabTechnician", "Administrator", "Sales"})
     public AccountDTO downloadAccountForDetails(String userName) throws AppBaseException {
-        System.out.println("----------Endpoint-------");
-        System.out.println("username " + userName);
         accountState = accountFacade.findByLogin(userName);
         return AccountsConverter.createAccountDTOFromEntity(accountState);
     }
 
-    public AccountDTO getAccountForChangePassword(AccountDTO accountDTO) throws AppBaseException {
-        accountState = accountFacade.findByLogin(accountDTO.getLogin());
+    public AccountDTO downloadAccountForLogin(String userName) throws AppBaseException {
+        accountState = accountFacade.findByLogin(userName);
         return AccountsConverter.createAccountDTOFromEntity(accountState);
+    }
 
+    @TransactionAttribute(TransactionAttributeType.NEVER)
+    public AccountDTO getAccountForChangePassword(AccountDTO accountDTO) throws AppBaseException {
+        AccountDTO downloadedAccount = new AccountDTO();
+        String login = accountDTO.getLogin();
+        AccountDTO foundAccount;
+        boolean rollbackTX;
+        int retryTXCounter = txRetryLimit;
+        try {
+            accountState = accountManager.findByLogin(login);
+            downloadedAccount = AccountsConverter.createAccountDTOFromEntity(accountState);
+        } catch (AccountException ae) {
+            throw ae;
+        } catch (AppBaseException | EJBTransactionRolledbackException ex) {
+            Logger.getGlobal().log(Level.SEVERE, "Próba " + retryTXCounter
+                    + " wykonania metody biznesowej zakończona wyjątkiem klasy:"
+                    + ex.getClass().getName());
+            rollbackTX = true;
+        }
+        return downloadedAccount;
     }
 
     public void resetPassword(AccountDTO accountDTO) throws AppBaseException {
@@ -122,6 +143,30 @@ public class AccountEndpoint implements Serializable {
     @RolesAllowed({"Assessor", "LabTechnician", "Administrator", "Sales"})
     public String downloadMyLogin() throws IllegalStateException {
         return sctx.getCallerPrincipal().getName();
+    }
+
+    public void checkEmail(String email) throws AppBaseException {
+        boolean rollbackTX;
+        int retryTXCounter = txRetryLimit;
+    }
+
+    @TransactionAttribute(TransactionAttributeType.NEVER)
+    public void confirmAccount(AccountDTO newAccount) throws AppBaseException {
+        String login = newAccount.getLogin();
+        String email = newAccount.getEmail();
+        boolean rollbackTX;
+        int retryTXCounter = txRetryLimit;
+
+        try {
+            accountManager.confirmAccount(login, email);
+        } catch (AccountException ae) {
+            throw ae;
+        } catch (AppBaseException | EJBTransactionRolledbackException ex) {
+            Logger.getGlobal().log(Level.SEVERE, "Próba " + retryTXCounter
+                    + " wykonania metody biznesowej zakończona wyjątkiem klasy:"
+                    + ex.getClass().getName());
+            rollbackTX = true;
+        }
     }
 
     @TransactionAttribute(TransactionAttributeType.NEVER)
@@ -163,8 +208,6 @@ public class AccountEndpoint implements Serializable {
     @RolesAllowed({"Administrator"})
     public AccountDTO getAccountForValidation(AccountDTO accountDTO) {
         accountState = accountFacade.findById(accountDTO.getId());
-        System.out.println("-------------------------------");
-        System.out.println("get Account for validation in Endpoint " + accountDTO);
         return AccountsConverter.createAccountDTOFromEntityForVerification(accountState);
     }
 
@@ -174,7 +217,11 @@ public class AccountEndpoint implements Serializable {
         Administrator admin = administratorFacade.findById(adminId);
         accountState = accountFacade.findByLogin(accountDTO.getLogin());
         accountState.setType(accountDTO.getType());
-        accountState.setVerifiedBy(admin);
+        if (accountState.getVerifiedBy() == null) {
+            accountState.setVerifiedBy(admin);
+        } else {
+            throw AccountException.createAccountAlreadyValidatedException(accountState);
+        }
 
         if (null == accountState) {
             throw AccountException.createExceptionWrongState(accountState);
@@ -201,18 +248,38 @@ public class AccountEndpoint implements Serializable {
     }
 
     @RolesAllowed({"Administrator"})
-    public void saveUserAccountAfterEdition(AccountDTO accountDTO) throws AppBaseException {
+    public void saveUserAccountAfterEdition(AccountDTO accountDTO, String oldLogin) throws AppBaseException {
         if (null == accountState) {
             throw AccountException.createExceptionWrongState(accountState);
         }
-        accountState.setLogin(accountDTO.getLogin());
+        if (!(accountState.getLogin()).equals(accountDTO.getLogin())) {
+            accountState.setLogin(accountDTO.getLogin());
+            List<Account> accountsList = accountFacade.findAll();
+            String login = accountState.getLogin();
+            for (Account accountA : accountsList) {
+                String existingLogin = accountA.getLogin();
+                if (existingLogin.equals(login)) {
+                    throw AccountException.createAccountDoesExistException(login);
+                }
+            }
+        }
         if (accountDTO.getNewPassword() != null) {
             accountState.setPassword(hashGenerator.generateHash(accountDTO.getNewPassword()));
         }
         accountState.setName(accountDTO.getName());
         accountState.setSurname(accountDTO.getSurname());
         accountState.setPhone(accountDTO.getPhone());
-        accountState.setEmail(accountDTO.getEmail());
+        if (!(accountState.getEmail()).equals(accountDTO.getEmail())) {
+            accountState.setEmail(accountDTO.getEmail());
+            List<Account> accountsList = accountFacade.findAll();
+            String email = accountState.getEmail();
+            for (Account accountA : accountsList) {
+                String existingEmail = accountA.getEmail();
+                if (existingEmail.equals(email)) {
+                    throw AccountException.createEmailDoesExistException(email);
+                }
+            }
+        }
         accountState.setType(accountDTO.getType());
         boolean rollbackTX;
         int retryTXCounter = txRetryLimit;
@@ -240,19 +307,39 @@ public class AccountEndpoint implements Serializable {
         if (null == accountState) {
             throw AccountException.createExceptionWrongState(accountState);
         }
-        accountState.setLogin(accountDTO.getLogin());
+        if (!(accountState.getLogin()).equals(accountDTO.getLogin())) {
+            accountState.setLogin(accountDTO.getLogin());
+            List<Account> accountsList = accountFacade.findAll();
+            String login = accountState.getLogin();
+            for (Account accountA : accountsList) {
+                String existingLogin = accountA.getLogin();
+                if (existingLogin.equals(login)) {
+                    throw AccountException.createAccountDoesExistException(login);
+                }
+            }
+        }
         accountState.setPassword(hashGenerator.generateHash(accountDTO.getPassword()));
         accountState.setName(accountDTO.getName());
         accountState.setSurname(accountDTO.getSurname());
         accountState.setPhone(accountDTO.getPhone());
-        accountState.setEmail(accountDTO.getEmail());
+        if (!(accountState.getEmail()).equals(accountDTO.getEmail())) {
+            accountState.setEmail(accountDTO.getEmail());
+            List<Account> accountsList = accountFacade.findAll();
+            String email = accountState.getEmail();
+            for (Account accountA : accountsList) {
+                String existingEmail = accountA.getEmail();
+                if (existingEmail.equals(email)) {
+                    throw AccountException.createEmailDoesExistException(email);
+                }
+            }
+        }
         accountState.setQuestion(accountDTO.getQuestion());
         accountState.setAnswer(accountDTO.getAnswer());
         boolean rollbackTX;
         int retryTXCounter = txRetryLimit;
         do {
             try {
-                accountManager.saveUserAccountAfterEdition(accountState);
+                accountManager.saveMyAccountAfterEdition(accountState);
                 rollbackTX = accountManager.isLastTransactionRollback();
             } catch (AccountException ae) {
                 throw ae;
@@ -268,17 +355,28 @@ public class AccountEndpoint implements Serializable {
             throw AccountException.createAccountExceptionWithTxRetryRollback();
         }
     }
- 
+
     @RolesAllowed({"Administrator"})
-    public void activateAccount(AccountDTO accountDTO) {
+    public void activateAccount(AccountDTO accountDTO) throws AppBaseException{
         Account account = accountFacade.find(accountDTO.getId());
-        account.setActive(true);
+        if (account.isActive() == false) {
+            account.setActive(true);
+        } else {
+            throw AccountException.createAccountAlreadyActivatedException(accountState);
+        }
+        
+        
+
     }
 
     @RolesAllowed({"Administrator"})
-    public void deactivateAccount(AccountDTO accountDTO) {
+    public void deactivateAccount(AccountDTO accountDTO) throws AppBaseException{
         Account account = accountFacade.find(accountDTO.getId());
-        account.setActive(false);
+        if (account.isActive() == true) {
+            account.setActive(false);
+        } else {
+            throw AccountException.createAccountAlreadyDeactivatedException(accountState);
+        }
     }
 
 }

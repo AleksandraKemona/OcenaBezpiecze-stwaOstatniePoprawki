@@ -1,5 +1,7 @@
 package pl.lodz.p.it.spjava.e11.sa.ejb.manager;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.*;
 import javax.inject.Inject;
 import pl.lodz.p.it.spjava.e11.sa.ejb.facade.AccountFacade;
@@ -28,15 +30,21 @@ public class AdministratorManager extends AbstractManager
    
 
     public void setTypeAsAdministrator (Administrator administrator, String accountLogin) throws AppBaseException{
-        System.out.println("----------------------------------");
-        System.out.println("administrator Manager administrator "+administrator + administrator.getAdminId() + administrator.getAdminStamp()
-        +administrator.getAccount());
+
         Account accountInEndpoint = accountFacade.findByLogin(accountLogin);
-        System.out.println("account " + accountInEndpoint);
-        administrator.setAccount(accountInEndpoint);
-        System.out.println("administrator Manager administrator "+administrator + administrator.getAdminId() + administrator.getAdminStamp()
-        +administrator.getAccount());
-        administratorFacade.create(administrator);
+        List<Administrator> adminList = administratorFacade.findAll();
+        List<String> stamps = new ArrayList<>();
+        for (Administrator administrator1 : adminList) {
+            String stampExisting = administrator1.getAdminStamp();
+            stamps.add(stampExisting);
+        }
+        if (!stamps.contains(administrator.getAdminStamp())) {
+            administrator.setAccount(accountInEndpoint);
+            administratorFacade.create(administrator);
+            
+        }
+
+        
     }
     
 }

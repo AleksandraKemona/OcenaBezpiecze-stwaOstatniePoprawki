@@ -1,11 +1,8 @@
 package pl.lodz.p.it.spjava.e11.sa.dto;
 
-import java.util.Date;
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,24 +17,23 @@ public class AccountDTO {
 
     private Long id;
 
-    @Getter
     @Setter
     private String type;
 
     @Getter
     @Setter
     @NotNull(message = "{constraint.notnull}")
-    @Size(min = 6, max = 32, message = "{constraint.string.length.notinrange}")
+    @Size(min = 8, max = 32, message = "{constraint.string.length.notinrange}")
     @Pattern(regexp = "^[_a-zA-Z0-9-]*$", message = "{constraint.string.incorrectchar}")
     private String login;
 
-    
     @Getter
     @Setter
     @NotNull(message = "{constraint.notnull}")
-    @Size(min = 6, max = 32, message = "{constraint.string.length.notinrange}")
+    @Size(min = 8, max = 32, message = "{constraint.string.length.notinrange}")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&_])[A-Za-z\\d@$!%*?&_]*$", message = "{constraint.string.incorrectcharPassword}")
     private String password;
-    
+
     @Getter
     @Setter
     private String newPassword;
@@ -45,14 +41,14 @@ public class AccountDTO {
     @Getter
     @Setter
     @NotNull(message = "{constraint.notnull}")
-    @Pattern(regexp = "^[ A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9-]*$",message = "{constraint.string.incorrectchar.name}")
+    @Pattern(regexp = "^[ A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9-]*$", message = "{constraint.string.incorrectchar.name}")
     @Size(min = 3, max = 32, message = "{constraint.string.length.notinrange.name}")
     private String name;
 
     @Getter
     @Setter
     @NotNull(message = "{constraint.notnull}")
-    @Pattern(regexp = "^[ A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9-]*$",message = "{constraint.string.incorrectchar.name}")
+    @Pattern(regexp = "^[ A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9-]*$", message = "{constraint.string.incorrectchar.name}")
     @Size(min = 3, max = 32, message = "{constraint.string.length.notinrange.name}")
     private String surname;
 
@@ -75,7 +71,7 @@ public class AccountDTO {
 
     @Getter
     @Setter
-    private boolean isActive;
+    private boolean active;
 
     @Getter
     @Setter
@@ -86,15 +82,10 @@ public class AccountDTO {
     @Setter
     @NotNull(message = "{constraint.notnull}")
     private String answer;
-    
-    @Getter
-    @Setter
-    private String newAnswer;
-    
 
     @Getter
     @Setter
-    private AccountDTO account;//ToDo co to jest?
+    private String newAnswer;
 
     private boolean confirmed;
 
@@ -116,17 +107,26 @@ public class AccountDTO {
         }
     }
 
-    public AccountDTO(Long id, String type, String login, String password, String name, String surname, String email, String phone, AdministratorDTO verifiedBy, boolean isActive, String question, String answer) {
+    public String getType() {
+        if (type == null) {
+            return "Unverified";
+        
+        }else{
+        return type;
+        }
+    }
+
+    public AccountDTO(Long id, String type, String login, String password, String name, String surname, String email, String phone, AdministratorDTO verifiedBy, boolean active, String question, String answer) {
         this.id = id;
         this.type = type;
         this.login = login;
-        this.password=password;
+        this.password = password;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.phone = phone;
         this.verifiedBy = verifiedBy;
-        this.isActive = isActive;
+        this.active = active;
         this.question = question;
         this.answer = answer;
     }

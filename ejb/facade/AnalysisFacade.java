@@ -44,7 +44,6 @@ public class AnalysisFacade extends AbstractFacade<Analysis> {
         tq.setParameter("categoryId", categoryId);
         Analysis analysis = tq.getSingleResult();
         demandedAnalysisList.add(analysis);
-//        em.refresh(analysis);
         return demandedAnalysisList;
     }
     
@@ -87,14 +86,11 @@ public class AnalysisFacade extends AbstractFacade<Analysis> {
             super.create(entity);
             em.flush();
         } catch (PersistenceException|DatabaseException ex) {
-            System.out.println("analysis facade wejsćie do catch---------------");
             final Throwable cause = ex.getCause();
             final Throwable causeCause = ex.getCause().getCause();
             
             if (cause instanceof DatabaseException
                     && causeCause.getMessage().contains(DB_UNIQUE_CONSTRAINT_FOR_ANALYSIS_NAME)) {
-                System.out.println("-------------------Analysis facade zlapany błąd----------------");
-                System.out.println("Analysis exception " + AnalysisException.createWithDbCheckConstraintKey(entity, cause));
                 throw AnalysisException.createWithDbCheckConstraintKey(entity, cause);
             }
         }

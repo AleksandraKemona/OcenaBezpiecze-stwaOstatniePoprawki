@@ -34,8 +34,6 @@ public class AnalysisManager extends AbstractManager{
     
     public Analysis downloadAnalysisForDetails(Long id) {
         Analysis downloadedAnalysis = analysisFacade.find(id);
-//        if (null == pobieraneKonto)
-//            throw ...;
         analysisFacade.refresh(downloadedAnalysis);
         return downloadedAnalysis;
     }

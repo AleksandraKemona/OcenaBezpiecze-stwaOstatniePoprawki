@@ -30,7 +30,7 @@ public class SubstrateManager extends AbstractManager {
         substrateFacade.create(newSubstrate);
     }
 
-    public List<Substrate> downloadAllSubstrates() throws AppBaseException{
+    public List<Substrate> downloadAllSubstrates() throws AppBaseException {
         return substrateFacade.findAll();
     }
 
@@ -45,12 +45,7 @@ public class SubstrateManager extends AbstractManager {
     }
 
     public Substrate downloadSubstrateForEdition(Long id) throws AppBaseException {
-        
-        
         editedSubstrate = substrateFacade.find(id);
-        System.out.println("---------------------------------------------");
-        System.out.println("download Account FOr Validation w Managerze "+ editedSubstrate);
-        
         if (null == editedSubstrate) {
             throw SubstrateException.createExceptionWrongState(editedSubstrate);
         } else {

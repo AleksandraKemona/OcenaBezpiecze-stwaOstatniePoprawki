@@ -1,6 +1,7 @@
 package pl.lodz.p.it.spjava.e11.sa.ejb.endpoint;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -81,7 +82,6 @@ public class CosmeticEndpoint implements Serializable {
                 cosmeticManager.createCosmetic(cosmetic, categoryName);
                 rollbackTX = cosmeticManager.isLastTransactionRollback();
             } catch (CosmeticException se) {
-                System.out.println("-------------Endpoint catch Cosmetic exception----------");
                 throw se;
             } catch (AppBaseException | EJBTransactionRolledbackException ex) {
                 Logger.getGlobal().log(Level.SEVERE, "Próba " + retryTXCounter
@@ -98,20 +98,22 @@ public class CosmeticEndpoint implements Serializable {
 
     @TransactionAttribute(TransactionAttributeType.NEVER)
     public void confirmCosmetic(CosmeticDTO newCosmetic) throws AppBaseException {
-        System.out.println("----------------Endpoint confirm cosmetic---------------");
         String cosmeticName = newCosmetic.getName();
-        System.out.println("cosmetic name "+cosmeticName);
+        List<String> cosmeticNamesList = new ArrayList<>();
         boolean rollbackTX;
         int retryTXCounter = txRetryLimit;
 
         try {
-            Cosmetic isDuplicate = cosmeticFacade.findByName(cosmeticName);
-            if (isDuplicate!=null) {
-                throw CosmeticException.createCosmeticDoesExistException(cosmeticName);  
+            List<Cosmetic> cosmetics = cosmeticFacade.findAll();
+            for (Cosmetic cosmetic : cosmetics) {
+                String cosmeticNameForList = cosmetic.getName();
+                cosmeticNamesList.add(cosmeticNameForList);
             }
-            
-        } catch (CosmeticException se) {
-            throw se;
+            if (cosmeticNamesList.contains(cosmeticName)) {
+                throw CosmeticException.createCosmeticDoesExistException(cosmeticName);
+            }
+        } catch (CosmeticException ce) {
+            throw ce;
         } catch (AppBaseException | EJBTransactionRolledbackException ex) {
             Logger.getGlobal().log(Level.SEVERE, "Próba " + retryTXCounter
                     + " wykonania metody biznesowej zakończona wyjątkiem klasy:"
@@ -176,7 +178,6 @@ public class CosmeticEndpoint implements Serializable {
         int retryTXCounter = txRetryLimit;
         do {
             try {
-//                cosmeticManager.saveCosmeticAfterEdition(cosmeticState);
                 cosmeticFacade.edit(cosmeticState);
                 cosmeticState = null;
                 rollbackTX = cosmeticManager.isLastTransactionRollback();
@@ -205,7 +206,6 @@ public class CosmeticEndpoint implements Serializable {
         int retryTXCounter = txRetryLimit;
         do {
             try {
-//                cosmeticManager.saveCosmeticAfterEdition(cosmeticState);
                 cosmeticFacade.edit(cosmeticState);
                 cosmeticState = null;
                 rollbackTX = cosmeticManager.isLastTransactionRollback();
@@ -267,7 +267,6 @@ public class CosmeticEndpoint implements Serializable {
     public void setChoosenCosmetic(CosmeticDTO cosmeticDTO, String userName) throws AppBaseException {
         Long assessorId = accountManager.getUserId(userName);
         Assessor assessor = assessorFacade.findById(assessorId);
-//        cosmeticState = cosmeticFacade.findByName(cosmeticDTO.getName());
         cosmeticState.setAssessedBy(assessor);
         boolean rollbackTX;
         int retryTXCounter = txRetryLimit;
@@ -292,13 +291,12 @@ public class CosmeticEndpoint implements Serializable {
     }
 
     public void setCosmeticNotChoosen(CosmeticDTO cosmeticDTO) throws AppBaseException {
-//        cosmeticState = cosmeticFacade.findByName(cosmeticDTO.getName());
         cosmeticState.setAssessedBy(null);
         boolean rollbackTX;
         int retryTXCounter = txRetryLimit;
         do {
             try {
-                cosmeticManager.setChoosenCosmetic(cosmeticState);
+                cosmeticManager.setNotChoosenCosmetic(cosmeticState);
                 rollbackTX = cosmeticManager.isLastTransactionRollback();
             } catch (CosmeticException ce) {
                 throw ce;

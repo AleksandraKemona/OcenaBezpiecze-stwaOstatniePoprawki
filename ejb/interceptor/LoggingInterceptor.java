@@ -12,7 +12,6 @@ public class LoggingInterceptor {
     @Resource
     private SessionContext sessionContext;
 
-    
     @AroundInvoke
     public Object additionalInvokeForMethod(InvocationContext invocation) throws Exception {
         StringBuilder sb = new StringBuilder("Wywołanie metody biznesowej ")
@@ -30,19 +29,16 @@ public class LoggingInterceptor {
                     }
                 }
             }
-
             Object result = invocation.proceed();
-
             if (result != null) {
                 sb.append(" zwrócono ").append(result.getClass().getName()).append('=').append(result);
             } else {
                 sb.append(" zwrócono wartość null");
             }
-
             return result;
         } catch (Exception ex) {
             sb.append(" wystapil wyjatek: ").append(ex);
-            throw ex; //ponowne zgloszenie wyjatku
+            throw ex;
         } finally {
             Logger.getGlobal().log(Level.INFO, sb.toString());
         }

@@ -32,8 +32,6 @@ public class AccountManager extends AbstractManager
     @Inject
     private AccountFacade accountFacade;
 
-    
-
     @Inject
     private AccountController accountController;
 
@@ -51,16 +49,15 @@ public class AccountManager extends AbstractManager
 
     @Inject
     private AdministratorFacade administratorFacade;
-    
+
     @Inject
     private LabTechnicianFacade labTechnicianFacade;
-    
+
     @Inject
     private SalesFacade salesFacade;
-    
+
     @Inject
     private AssessorFacade assessorFacade;
-    
 
     private Account validatedAccount;
 
@@ -74,10 +71,6 @@ public class AccountManager extends AbstractManager
 
     public Account downloadAccountForValidation(Long id) {
         validatedAccount = accountFacade.find(id);
-        System.out.println("---------------------------------------------");
-        System.out.println("download Account FOr Validation w Managerze " + validatedAccount);
-//        if (null == edytowaneKonto)
-//            throw ...;
         accountFacade.refresh(validatedAccount);
         return validatedAccount;
     }
@@ -87,19 +80,9 @@ public class AccountManager extends AbstractManager
     }
 
     public void saveAccountAfterValidation(Account account) throws AppBaseException {
-        System.out.println("-----------------------------------");
-        System.out.println("Account Manager save after validation account " + account);
-        System.out.println("e-mail " + account.getEmail());
-        System.out.println("id " + account.getAccountId());
-
         accountFacade.edit(account);
         String accountLogin = account.getLogin();
-        System.out.println("-----------------------------------");
-        System.out.println("Account Manager save after validation account " + account);
-        System.out.println("e-mail " + account.getEmail());
-        System.out.println("id " + account.getAccountId());
         String typeName = account.getType();
-        System.out.println("Account Manager save after validation typeName " + typeName);
         String name = account.getName();
         String surname = account.getSurname();
         String newStamp = name.substring(0, 1) + ". " + surname;
@@ -119,9 +102,34 @@ public class AccountManager extends AbstractManager
 
     }
 
+    public Account findByLogin(String login) throws AppBaseException {
+        return accountFacade.findByLogin(login);
+    }
+
+    public Account findByEmail(String email) throws AppBaseException {;
+        Account isEmailDuplicate = accountFacade.findByEmail(email);
+        if (isEmailDuplicate != null) {
+            throw AccountException.createEmailDoesExistException(email);
+        }
+        return accountFacade.findByEmail(email);
+    }
+    
+    public void confirmAccount (String login, String email)throws AppBaseException{
+        List<Account> accountsList = accountFacade.findAll();
+        for (Account account : accountsList) {
+            String existingLogin = account.getLogin();
+            String existingEmail = account.getEmail();
+            if (existingLogin.equals(login)) {
+                throw AccountException.createAccountDoesExistException(login);
+            }
+            if (existingEmail.equals(email)) {
+                throw AccountException.createEmailDoesExistException(email);
+            }
+        }
+        
+    }
+
     public Account downloadAccountForEdition(Long id) {
-//        if (null == edytowaneKonto)
-//            throw ...;
         accountFacade.refresh(validatedAccount);
         return validatedAccount;
     }
@@ -131,53 +139,32 @@ public class AccountManager extends AbstractManager
     }
 
     public void saveMyAccountAfterEdition(Account account) throws AppBaseException {
+        
         accountFacade.edit(account);
     }
 
     public Long getUserId(String userName) throws AppBaseException {
-        System.out.println("------------Account Manager---------------");
-        System.out.println("userName " + userName);
         Account account = accountFacade.findByLogin(userName);
-        System.out.println("account "+account);
         String userType = account.getType();
-        System.out.println("user Type "+userType);
         Long id = null;
         if (userType.equals("Administrator")) {
             Administrator administrator = administratorFacade.findByAccount(account);
             Long adminId = administrator.getAdminId();
-            id=adminId;
-        } else if(userType.equals("Sales")) {
+            id = adminId;
+        } else if (userType.equals("Sales")) {
             Sales sales = salesFacade.findByAccount(account);
-        Long salesId = sales.getSalesId();
-        id=salesId;
-        }else if(userType.equals("LabTechnician")) {
+            Long salesId = sales.getSalesId();
+            id = salesId;
+        } else if (userType.equals("LabTechnician")) {
             LabTechnician labTechnician = labTechnicianFacade.findByAccount(account);
-        Long labId = labTechnician.getLabId();
-        id=labId;
-        }else if(userType.equals("Assessor")) {
+            Long labId = labTechnician.getLabId();
+            id = labId;
+        } else if (userType.equals("Assessor")) {
             Assessor assessor = assessorFacade.findByAccount(account);
-        Long assessorId = assessor.getAssessorId();
-        id=assessorId;
+            Long assessorId = assessor.getAssessorId();
+            id = assessorId;
         }
         return id;
     }
 
-//    public void setTypeAsAdministrator (Administrator administrator) throws AppBaseException{
-//        administratorFacade.create(administrator);
-//    }
-//    public void createAccount(Administrator2 administrator) throws AppBaseException {
-//        accountFacade.create(administrator);
-//    }
-//
-//    public void createAccount(Sales sales) throws AppBaseException {
-//        accountFacade.create(sales);
-//    }
-//
-//    public void createAccount(LabTechnician labTech) throws AppBaseException {
-//        accountFacade.create(labTech);
-//    }
-//    
-//    public void createAccount(Assessor assessor) throws AppBaseException {
-//        accountFacade.create(assessor);
-//    }
 }

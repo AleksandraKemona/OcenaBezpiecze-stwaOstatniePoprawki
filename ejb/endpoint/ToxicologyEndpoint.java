@@ -33,9 +33,6 @@ public class ToxicologyEndpoint implements Serializable{
     @EJB
     private ToxicologyManager toxicologyManager;
 
-//    @EJB
-//    private CosmeticManager cosmeticManager;
-
     @EJB
     private ToxicologyFacade toxicologyFacade;
     
@@ -51,9 +48,6 @@ public class ToxicologyEndpoint implements Serializable{
  
         Toxicology toxicology =new Toxicology();
         CosmeticDTO connectedCosmetic = CosmeticConverter.createCosmeticDTOFromEntity(cosmeticFacade.findById(connectedCosmeticId));
-//        Cosmetic describedCosmetic = cosmeticFacade.findById(describedCosmeticId);
-//        toxicology.setDescribedBy(SubstrateConverter.createListSubstrateEntityFromDTO(appliedSubstrates));
-        System.out.println("create Toxicology in ToxicologyEndpoint toxicology " + toxicology);
         boolean rollbackTX;
         int retryTXCounter = txRetryLimit;
 
