@@ -122,7 +122,8 @@ public class AccountsConverter {
 
         for (AccountDTO accountDTO : listAccountsDTO) {
             Account account = new Account(accountDTO.getId(), accountDTO.getLogin(), 
-                    accountDTO.getName(), accountDTO.getSurname(), accountDTO.getEmail(), accountDTO.getPhone(), 
+                    accountDTO.getName(), accountDTO.getSurname(), accountDTO.getEmail(), accountDTO.getPhone(),
+                    accountDTO.isActive(),
                     accountDTO.getQuestion(), accountDTO.getAnswer());
             listAccount.add(account);
         }
@@ -130,65 +131,4 @@ public class AccountsConverter {
         return listAccount;
     }
     
-    //    public static AccountDTO createAccountDTOFromEntity(Account account) {
-//        // Konto jest abstrakcyjna, obiekt musi być klasy potomnej
-//        
-//        if(account instanceof Administrator2)
-//            return createAdministratorDTOFromEntity((Administrator2) account);
-//        
-//        if(account instanceof Assessor)
-//            return createAssessorDTOFromEntity((Assessor) account);
-//        
-//        if(account instanceof Sales)
-//            return createSalesDTOFromEntity((Sales) account);
-//        
-//        if(account instanceof LabTechnician)
-//            return createLabTechnicianDTOFromEntity((LabTechnician) account);
-//        
-//        return null;
-//    }
-//    private static AdministratorDTO createAdministratorDTOFromEntity(Administrator2 administrator) {
-//        return null == administrator ? null : new AdministratorDTO(administrator.getAdminStamp(), administrator.getId(), 
-//                administrator.getType(), administrator.getLogin(), administrator.getName(), administrator.getSurname(),
-//                administrator.getEmail(), administrator.getPhone(), administrator.getVerifiedBy(), administrator.isActive(), 
-//                administrator.getQuestion(), administrator.getAnswer());
-//    }
-//     
-//    private static AssessorDTO createAssessorDTOFromEntity(Assessor assessor) {
-//        return null == assessor ? null : new AssessorDTO(assessor.getAssessorStamp(), assessor.getId(), 
-//                assessor.getType(), assessor.getLogin(), assessor.getName(), assessor.getSurname(),
-//                assessor.getEmail(), assessor.getPhone(), assessor.getVerifiedBy(), assessor.isActive(), 
-//                assessor.getQuestion(), assessor.getAnswer());
-//    }
-//     
-//    private static SalesDTO createSalesDTOFromEntity(Sales sales) {
-//        return null == sales ? null : new SalesDTO(sales.getSalesStamp(), sales.getId(), 
-//                sales.getType(), sales.getLogin(), sales.getName(), sales.getSurname(),
-//                sales.getEmail(), sales.getPhone(), sales.getVerifiedBy(), sales.isActive(), 
-//                sales.getQuestion(), sales.getAnswer());
-//    }
-//     
-//    private static LabDTO createLabTechnicianDTOFromEntity(LabTechnician labTechnician) {
-//        return null == labTechnician ? null : new LabDTO(labTechnician.getLabStamp(), labTechnician.getId(), 
-//                labTechnician.getType(), labTechnician.getLogin(), labTechnician.getName(), labTechnician.getSurname(),
-//                labTechnician.getEmail(), labTechnician.getPhone(), labTechnician.getVerifiedBy(), labTechnician.isActive(), 
-//                labTechnician.getQuestion(), labTechnician.getAnswer());
-//    }
-//     
-//     
-//    
-
-//    public static List<AccountDTO> createListUnconfirmedAccountsDTOFromEntity(List<AccountNotConfirmed> listAccounts) {
-//        List<AccountDTO> listAccountDTO = new ArrayList<>();
-//
-//        for (Account account : listAccounts) {
-//            AccountDTO accountDTO = new AccountDTO(account.getAccountId(), account.getType(),
-//                    account.getLogin(), account.getName(), account.getSurname(),
-//                    account.getEmail(), account.getPhone(), account.getVerifiedBy(),
-//                    account.isActive(),account.getQuestion(),account.getAnswer());
-//            listAccountDTO.add(accountDTO);
-//        }
-//
-//        return listAccountDTO;
-//    }
 }

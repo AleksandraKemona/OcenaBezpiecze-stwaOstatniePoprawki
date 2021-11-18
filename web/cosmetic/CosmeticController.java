@@ -16,7 +16,6 @@ import java.util.logging.Level;
 import javax.inject.Inject;
 import pl.lodz.p.it.spjava.e11.sa.exception.AppBaseException;
 import pl.lodz.p.it.spjava.e11.sa.exception.CosmeticException;
-import static pl.lodz.p.it.spjava.e11.sa.exception.CosmeticException.KEY_NAME_DOES_NOT_EXIST;
 import pl.lodz.p.it.spjava.e11.sa.web.category.CategoryController;
 import pl.lodz.p.it.spjava.e11.sa.web.substrate.SubstrateController;
 
@@ -83,19 +82,11 @@ public class CosmeticController implements Serializable {
     }
 
     public String confirmCosmetic(CosmeticDTO newCosmetic) {
-//        categoryController.chooseCategory(newCosmetic, categoryName);
-System.out.println("-----------Controller confirm cosmetic-----------------");
-        System.out.println("new cosmetic "+newCosmetic);
         try {
             cosmeticEndpoint.confirmCosmetic(newCosmetic);
             return "confirmCosmetic";
         } catch (CosmeticException ce) {
-            System.out.println("---------Controller cosmetic name exists------------");
-            System.out.println("wiadomość " + ce.getMessage());
-            if (CosmeticException.KEY_NAME_DOES_NOT_EXIST.equals(ce.getMessage())) {
-                return "confirmCosmetic";  
-            }else if(CosmeticException.KEY_NAME_DOES_EXIST.equals(ce.getMessage())){
-                System.out.println("----------Wejście do segmentu obsługi Key name does exist-------");
+            if (CosmeticException.KEY_NAME_DOES_EXIST.equals(ce.getMessage())){
                 ContextUtils.emitInternationalizedMessage("createNewCosmeticForm:name",
                         CosmeticException.KEY_NAME_DOES_EXIST);           
             }else{
@@ -126,9 +117,6 @@ System.out.println("-----------Controller confirm cosmetic-----------------");
         }
     }
 
-//    public void deleteCosmetic(CosmeticDTO cosmetic) {
-//        cosmeticEndpoint.deleteCosmetic(cosmetic.getId());
-//    }
     public CosmeticDTO getCosmeticForDeletion() {
         return cosmeticForDeletion;
     }
@@ -268,10 +256,9 @@ System.out.println("-----------Controller confirm cosmetic-----------------");
         } catch (CosmeticException ce) {
             if (CosmeticException.KEY_COSMETIC_ALREADY_CHANGED.equals(ce.getMessage())) {
                 ContextUtils.emitInternationalizedMessage("deleteCosmeticForm:name", CosmeticException.KEY_COSMETIC_ALREADY_CHANGED);
-            } else if (CosmeticException.KEY_COSMETIC_NOT_FOUND.equals(ce.getMessage())) {
-                ContextUtils.emitInternationalizedMessage("deleteCosmeticForm:name", CosmeticException.KEY_COSMETIC_NOT_FOUND);
+            } else if (CosmeticException.KEY_NAME_DOES_NOT_EXIST.equals(ce.getMessage())) {
+                ContextUtils.emitInternationalizedMessage(null, CosmeticException.KEY_NAME_DOES_NOT_EXIST);
             } else if (CosmeticException.KEY_COSMETIC_OPTIMISTIC_LOCK.equals(ce.getMessage())) {
-                System.out.println("--------------confirm delete cosmetic w Controllerze---------");
                 ContextUtils.emitInternationalizedMessage(null, CosmeticException.KEY_COSMETIC_OPTIMISTIC_LOCK);
             } else {
                 Logger.getLogger(CosmeticController.class
@@ -296,7 +283,9 @@ System.out.println("-----------Controller confirm cosmetic-----------------");
             return setChoosenCosmetic(choosenCosmetic, userName);
         } catch (CosmeticException ce) {
             if (CosmeticException.KEY_COSMETIC_OPTIMISTIC_LOCK.equals(ce.getMessage())) {
-                ContextUtils.emitInternationalizedMessage("deleteCosmeticForm:name", CosmeticException.KEY_COSMETIC_OPTIMISTIC_LOCK);
+                ContextUtils.emitInternationalizedMessage(null, CosmeticException.KEY_COSMETIC_OPTIMISTIC_LOCK);
+            }else if(CosmeticException.KEY_COSMETIC_CHOOSEN.equals(ce.getMessage())) {
+                ContextUtils.emitInternationalizedMessage(null, CosmeticException.KEY_COSMETIC_CHOOSEN);
             } else {
                 Logger.getLogger(CosmeticController.class
                         .getName()).log(Level.SEVERE,
@@ -346,13 +335,11 @@ System.out.println("-----------Controller confirm cosmetic-----------------");
             return "listCosmetics";
         } catch (CosmeticException ce) {
             if (CosmeticException.KEY_COSMETIC_NAME_EXISTS.equals(ce.getMessage())) {
-                System.out.println("-------------------------unique--------------------");
-                System.out.println("key " + CosmeticException.KEY_COSMETIC_NAME_EXISTS);
-
                 ContextUtils.emitInternationalizedMessage("listCosmetics:name",
                         CosmeticException.KEY_COSMETIC_NAME_EXISTS);
-            } else if (CosmeticException.KEY_COSMETIC_OPTIMISTIC_LOCK.equals(ce.getMessage())) {
-                System.out.println("---------------------------------Blokada optymistyczna-----------------------");
+            } else if(CosmeticException.KEY_COSMETIC_CHOOSEN.equals(ce.getMessage())) {
+                ContextUtils.emitInternationalizedMessage("listCosmeticsForm:assessedBy", CosmeticException.KEY_COSMETIC_CHOOSEN);
+            }else if (CosmeticException.KEY_COSMETIC_OPTIMISTIC_LOCK.equals(ce.getMessage())) {
                 ContextUtils.emitInternationalizedMessage(null, CosmeticException.KEY_COSMETIC_OPTIMISTIC_LOCK);
             } else {
                 Logger.getLogger(CosmeticController.class
@@ -377,13 +364,9 @@ System.out.println("-----------Controller confirm cosmetic-----------------");
             return "listCosmetics";
         } catch (CosmeticException ce) {
             if (CosmeticException.KEY_COSMETIC_NAME_EXISTS.equals(ce.getMessage())) {
-                System.out.println("-------------------------unique--------------------");
-                System.out.println("key " + CosmeticException.KEY_COSMETIC_NAME_EXISTS);
-
                 ContextUtils.emitInternationalizedMessage("listCosmetics:name",
                         CosmeticException.KEY_COSMETIC_NAME_EXISTS);
             } else if (CosmeticException.KEY_COSMETIC_OPTIMISTIC_LOCK.equals(ce.getMessage())) {
-                System.out.println("---------------------------------Blokada optymistyczna-----------------------");
                 ContextUtils.emitInternationalizedMessage(null, CosmeticException.KEY_COSMETIC_OPTIMISTIC_LOCK);
             } else {
                 Logger.getLogger(CosmeticController.class

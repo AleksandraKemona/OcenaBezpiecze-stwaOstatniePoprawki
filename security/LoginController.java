@@ -8,14 +8,21 @@ import javax.inject.Named;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
-
+import pl.lodz.p.it.spjava.e11.sa.ejb.endpoint.AccountEndpoint;
+import pl.lodz.p.it.spjava.e11.sa.exception.AccountException;
+import pl.lodz.p.it.spjava.e11.sa.exception.AppBaseException;
+import pl.lodz.p.it.spjava.e11.sa.web.analysis.AnalysisController;
+import pl.lodz.p.it.spjava.e11.sa.web.utils.ContextUtils;
 
 @Named
 @RequestScoped
 public class LoginController {
-    
+
     @Inject
     private HttpServletRequest request;
+
+    @Inject
+    private AccountEndpoint accountEndpoint;
 
     @NotNull
     private String username;
@@ -23,23 +30,36 @@ public class LoginController {
     @NotNull
     private String password;
 
-     /**
-     * Dokonuje programowo uwierzytelnienia na podstawie loginu i hasła.
-     * Dane pochodzą z formularza uwierzytelniania.
-     * Dzięki samodzielnemu wywoływaniu login() można przechwycić wyjątek który jest rzucany w przypadku niepoprawnego uwierzytelnienia.
-     * Można to wykorzystać np. do blokowania konta po pewnej liczbie nieudanych prób.
-     */
     public String login() {
+        boolean isActive = false;
+        String stringForReturn = "";
         try {
-            System.out.println("username "+username +", password "+password);
-            request.login(username, password);
+            isActive = accountEndpoint.downloadAccountForLogin(username).isActive();
+            if (isActive == false) {
+                stringForReturn = "formNotActiveError";
+            } else if (isActive == true) {
+                request.login(username, password);
+                stringForReturn = "main";
+            }
+        }catch(AccountException ae){
+            if (AccountException.KEY_LOGIN_DOES_NOT_EXIST.equals(ae.getMessage())) {
+                stringForReturn= "formLoginError";
+            }
         } catch (ServletException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
             return "loginError";
+        } catch (AppBaseException abe) {
+            Logger.getLogger(AnalysisController.class.getName()).log(Level.SEVERE,
+                    "Zgłoszenie w metodzie akcji createAnalysis wyjątku typu: ", abe.getClass());
+            if (ContextUtils.isInternationalizationKeyExist(abe.getMessage())) {
+                ContextUtils.emitInternationalizedMessage(null, abe.getMessage());
+            }
+            return null;
         }
-        return "main";
-    }
 
+        return stringForReturn;
+    }
+    
     public String getUsername() {
         return username;
     }

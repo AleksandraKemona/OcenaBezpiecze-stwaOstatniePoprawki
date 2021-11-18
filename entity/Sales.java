@@ -16,7 +16,6 @@ import java.util.Objects;
 @Table(name = "Sales")
 @DiscriminatorValue("Sales")
 @NamedQueries({
-//    @NamedQuery(name = "sales.findAll", query = "SELECT a FROM Sales a"),
     @NamedQuery(name = "Sales.findByAccount", query = "SELECT s FROM Sales s WHERE s.account = :account"),
     @NamedQuery(name = "Sales.findById", query = "SELECT s FROM Sales s WHERE s.salesId = :salesId")
 })

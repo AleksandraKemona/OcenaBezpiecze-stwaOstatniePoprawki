@@ -29,8 +29,8 @@ public class ListCategoriesBean implements Serializable {
         categories = categoryController.listAllCategories();
     }
 
-    public String edit(CategoryDTO category) throws AppBaseException{
+    public String edit(CategoryDTO category){
         editCategoryBean.setEditedCategory(category);
-        return "editCategory";
+       return "editCategory";
     }
 }

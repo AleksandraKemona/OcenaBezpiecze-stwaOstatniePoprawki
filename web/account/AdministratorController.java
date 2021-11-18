@@ -43,14 +43,9 @@ public class AdministratorController implements Serializable{
     public String setTypeAsAdministrator (String accountLogin, String newStamp) throws AppBaseException{
         try {
         AdministratorDTO administratorDTO = new AdministratorDTO();
-            System.out.println("--------------------------");
-            System.out.println("Account controller set type administratorDTO"+ administratorDTO);
-            System.out.println("Account controller set type newStamp "+newStamp);
-            System.out.println("Account controller set type accountLogin "+accountLogin);
         administratorEndpoint.setTypeAsAdministrator(administratorDTO, accountLogin, newStamp);
         return newStamp;
         }catch (AccountException se) {
-            System.out.println("SE Message" + se.getMessage());
             if (AccountException.KEY_ADMIN_STAMP_EXISTS.equals(se.getMessage())) {
                 ContextUtils.emitInternationalizedMessage("validateAccountForm:adminStamp",
                         AccountException.KEY_ADMIN_STAMP_EXISTS);

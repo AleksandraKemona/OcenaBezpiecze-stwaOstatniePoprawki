@@ -12,7 +12,9 @@ import lombok.Setter;
 import pl.lodz.p.it.spjava.e11.sa.dto.AnalysisDTO;
 import pl.lodz.p.it.spjava.e11.sa.dto.CategoryDTO;
 import pl.lodz.p.it.spjava.e11.sa.ejb.endpoint.AnalysisEndpoint;
-import pl.lodz.p.it.spjava.e11.sa.exception.AppBaseException;
+import pl.lodz.p.it.spjava.e11.sa.exception.CategoryException;
+import pl.lodz.p.it.spjava.e11.sa.web.analysis.AnalysisController;
+import pl.lodz.p.it.spjava.e11.sa.web.utils.ContextUtils;
 
 @SessionScoped
 @Named
@@ -20,22 +22,24 @@ public class CreateCategoryBean implements Serializable {
 
     @Inject
     private CategoryController categoryController;
-    
+
+    @Inject
+    private AnalysisController analysisController;
+
     @EJB
     private AnalysisEndpoint analysisEndpoint;
-    
+
     @Setter
     private CategoryDTO newCategory;
-    
+
     @Getter
     @Setter
     private List<AnalysisDTO> listAnalysisDTO;
-    
+
     private List<AnalysisDTO> selectedAnalysisList;
-    
+
     @Setter
     private String demandedAnalysis;
-    
 
     public CategoryDTO getNewCategory() {
         if (null != newCategory) {
@@ -46,16 +50,14 @@ public class CreateCategoryBean implements Serializable {
         }
     }
 
-   public String getDemandedAnalysis() {
+    public String getDemandedAnalysis() {
         return demandedAnalysis;
     }
 
-    public String begin() throws AppBaseException{
+    public String begin() {
         newCategory = new CategoryDTO();
         demandedAnalysis = new String();
-        System.out.println("demanded Bean" + demandedAnalysis);
-        listAnalysisDTO = analysisEndpoint.listAllAnalysis();
-       
+        listAnalysisDTO = analysisController.listAllAnalysis();
 
         return "createCategory";
     }
@@ -64,36 +66,25 @@ public class CreateCategoryBean implements Serializable {
         return newCategory;
     }
 
-
     public String createCategory() {
-        
+
         if (null != newCategory && null != newCategory.getCategoryName()) {
 
-            selectedAnalysisList = new  ArrayList<>();
-            
+            selectedAnalysisList = new ArrayList<>();
+
             for (AnalysisDTO analysisDTO : listAnalysisDTO) {
                 if (analysisDTO.isSelected() == true) {
-                    selectedAnalysisList.add(analysisDTO);                  
-                    analysisDTO.setSelected(false); 
-                }               
-            } 
+                    selectedAnalysisList.add(analysisDTO);
+                    analysisDTO.setSelected(false);
+                }
+            }
             
-            categoryController.createCategory(newCategory, selectedAnalysisList);
-            return "listCategories";
-        } else {
-            
-            return "listCategories";
         }
+        return categoryController.createCategory(newCategory, selectedAnalysisList);
     }
-    
+
     public String abort() {
         return "listCategories";
     }
-    
-    
-    //    public String categoryChoiceAction() {
-//        newCosmetic.setCategoryDTO(categoryFacade.findByCategoryId(categoryChoiceController.getSelectedCategoryDTO().getCategoryId()));
-//        categoryEndpoint.chooseCategory(newCosmetic);
-//        return "confirmCosmetic";
-//    }
+
 }

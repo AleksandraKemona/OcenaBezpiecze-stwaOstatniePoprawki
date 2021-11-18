@@ -8,18 +8,14 @@ import lombok.Getter;
 import lombok.Setter;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "LABTECHNCIANS")
+@Table(name = "LABTECHNICIANS")
 @DiscriminatorValue("LABTECHNCIAN")
 @NamedQueries({
     @NamedQuery(name = "labTechnician.findAll", query = "SELECT a FROM LabTechnician a"),
-//    @NamedQuery(name = "labTechnician.findByLogin", query = "SELECT a FROM LabTechnician a WHERE a.login = :login"),
-//    @NamedQuery(name = "labTechnician.findById", query = "SELECT a FROM LabTechnician a WHERE a.labId = :labId")
 })
 @NoArgsConstructor
 

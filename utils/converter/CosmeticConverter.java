@@ -41,12 +41,6 @@ public class CosmeticConverter {
         );
     }
 
-//    public static CosmeticDTO createCosmeticDTOFromEntityTest(Cosmetic cosmetic) {
-//        return new CosmeticDTO(cosmetic.getId(), cosmetic.getOrderNb(),
-//                cosmetic.getName(), CategoryConverter.createCategoryDTOFromEntityForCosmetic(cosmetic.getCategoryId()),
-//                cosmetic.getComposition());
-//    }
-//    List<Cosmetic> listCosmetics = cosmeticFacade.findAll();
     public static List<CosmeticDTO> createListCosmeticDTOFromEntity(List<Cosmetic> listCosmetics) {
         List<CosmeticDTO> listCosmeticsDTO = new ArrayList<>();
 

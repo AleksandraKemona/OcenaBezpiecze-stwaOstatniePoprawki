@@ -38,26 +38,21 @@ public class ListCosmeticsBean implements Serializable {
         return "editCosmetic";
     }
 
-    public String showDetails(CosmeticDTO cosmeticDTO){
-        System.out.println("cosmetic DTO w list "+cosmeticDTO);
-       
+    public String showDetails(CosmeticDTO cosmeticDTO) {
         cosmeticDetailsBean.setDemandedAnalysis(cosmeticDTO.getCategory());
-        
-        cosmeticDetailsBean.setShowedCosmeticChoice(cosmeticDTO);
-        
-        return "cosmeticDetails";
+        return cosmeticDetailsBean.setShowedCosmeticChoice(cosmeticDTO);
     }
 
-    public String showDetailsForDeletion(CosmeticDTO cosmeticDTO){
+    public String showDetailsForDeletion(CosmeticDTO cosmeticDTO) {
         deleteCosmeticBean.setDeletedCosmeticChoice(cosmeticDTO);
         return "deleteCosmetic";
     }
 
-    public String chooseCosmetic(CosmeticDTO cosmeticDTO, String userName){
+    public String chooseCosmetic(CosmeticDTO cosmeticDTO, String userName) {
         return cosmeticController.chooseCosmetic(cosmeticDTO, userName);
     }
 
-    public String resignFromCosmetic(CosmeticDTO cosmeticDTO){
+    public String resignFromCosmetic(CosmeticDTO cosmeticDTO) {
         return cosmeticController.resignFromCosmetic(cosmeticDTO);
     }
 

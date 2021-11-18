@@ -16,7 +16,6 @@ import java.util.Objects;
 
 @DiscriminatorValue("ADMINISTRATOR")
 @NamedQueries({
-//    @NamedQuery(name = "administrator.findAll", query = "SELECT a FROM Administrator a"),
     @NamedQuery(name = "Administrator.findById", query = "SELECT a FROM Administrator a WHERE a.adminId = :adminId"),
     @NamedQuery(name = "Administrator.findByAccount", query = "SELECT a FROM Administrator a WHERE a.account = :account")
 })

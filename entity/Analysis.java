@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -22,7 +23,7 @@ import lombok.Setter;
 
 @Entity
 
-@Table(name = "ANALYSIS")
+@Table(name = "ANALYSIS", indexes = @Index(name = "DBCONSTRAINT_UNIQUE_ANALYSIS_NAME", columnList = "name", unique=true))
 
 @NamedQueries({
     @NamedQuery(name = "Analysis.findAll", query = "SELECT a FROM Analysis a"),
@@ -52,7 +53,6 @@ public class Analysis extends AbstractEntity implements Serializable {
     @Setter
     @NotNull(message="{constraint.notnull")
     @Size(min=3,max=32,message="{constraint.string.length.notinrange}")
-    @Column(name = "NAME", unique = true, nullable = false)
     private String name;
 
     

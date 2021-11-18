@@ -25,6 +25,8 @@ public class EditAccountBean implements Serializable {
     private HashGenerator hashGenerator;
 
     private AccountDTO editedAccount;
+    
+    private String oldLogin;
 
     @Getter
     @Setter
@@ -41,6 +43,7 @@ public class EditAccountBean implements Serializable {
 
     public void setUserAccountForEdition(AccountDTO editedAccountDTO) {
         this.editedAccount = accountController.getUserAccountForEdition(editedAccountDTO);
+        this.oldLogin = editedAccount.getLogin();
     }
 
     public void setMyAccountForEdition(String userName) {
@@ -55,49 +58,44 @@ public class EditAccountBean implements Serializable {
 
     public String saveUserAccount() {
         if ((editedAccount.getType()).equals("empty")) {
-        AccountDTO accountOldVersion = accountController.getMyAccountForEdition(editedAccount.getLogin());
+        AccountDTO accountOldVersion = accountController.getMyAccountForEdition(oldLogin);
         editedAccount.setType(accountOldVersion.getType());   
         }
-        System.out.println("edited account in save user "+editedAccount);
         if (null == editedAccount) {
             return "main";
         } else if (!editedAccount.getNewPassword().equals(repeatPassword)) {
             FacesContext.getCurrentInstance().addMessage("createAccount:repeatPassword", new FacesMessage("Hasla nie zgadzaja sie"));
             return "";
         }
-        return accountController.saveUserAccountAfterEdition(editedAccount);
+        return accountController.saveUserAccountAfterEdition(editedAccount, oldLogin);
     }
 
-    public String saveMyAccount() {
-        System.out.println("----------Save my account----------");
-        System.out.println("editedAccount "+ editedAccount);
-        String userLogin = editedAccount.getLogin();
+    public String saveMyAccount(String userName) {
+        String userLogin = userName;
         AccountDTO accountOldVersion = accountController.getMyAccountForEdition(userLogin);
-        System.out.println("account Old version "+ accountOldVersion);
         String oldPassword = accountOldVersion.getPassword();
-        
-
         String checkedPassword= hashGenerator.generateHash(editedAccount.getPassword());
         if (null == editedAccount) {
             return "main";
+       
         }else if(!oldPassword.equals(checkedPassword)){
             FacesContext.getCurrentInstance().addMessage("createAccount:repeatPassword", new FacesMessage("Nie poprawne stare hasło"));
             return "";
         } else if (!editedAccount.getNewPassword().equals(repeatPassword)) {
             FacesContext.getCurrentInstance().addMessage("createAccount:repeatPassword", new FacesMessage("Nowe hasła nie zgadzaja sie"));
             return "";
-        } else if (!accountOldVersion.getAnswer().equals(editedAccount.getAnswer())&& (editedAccount.getAnswer())!=null) {
+        } else if ((editedAccount.getAnswer())!=null && !accountOldVersion.getAnswer().equals(editedAccount.getAnswer())) {
             FacesContext.getCurrentInstance().addMessage("createAccount:repeatPassword", new FacesMessage("Niepoprawna odpowiedź"));
             return "";   
-        }
-        return accountController.saveUserAccountAfterEdition(editedAccount);
+        }        
+        return accountController.saveMyAccountAfterEdition(editedAccount);
     }
     
+    public String abortMy() {
+        return "myAccountDetails";
+    }
     
-
-
-
-    public String abort() {
+    public String abortUser() {
         return "listAccounts";
     }
 

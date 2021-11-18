@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -24,7 +25,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "COSMETICS")
+@Table(name = "Cosmetics", indexes = @Index(name = "DBCONSTRAINT_UNIQUE_COSMETIC_NAME", columnList = "name", unique=true))
 @NamedQueries({
     @NamedQuery(name = "Cosmetic.findAll", query = "SELECT c FROM Cosmetic c"),
     @NamedQuery(name = "Cosmetic.findByName", query = "SELECT c FROM Cosmetic c WHERE c.name = :name"),
@@ -55,7 +56,6 @@ public class Cosmetic extends AbstractEntity implements Serializable {
     @Setter
     @Size(min=3,max=32,message="{constraint.string.length.notinrange}")
     @Pattern(regexp="^[a-zA-Z,0-9- ]*$",message="{constraint.string.incorrectchar}")
-    @Column(name = "NAME", unique = true, nullable = false, updatable = true)
     private String name;
 
     @Getter

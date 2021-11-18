@@ -35,26 +35,19 @@ public class AccountDetailsBean implements Serializable {
     
 
 
-    public void setShowedAccountChoice(AccountDTO accountDTO) throws AppBaseException{
-        System.out.println("-----------setShowedAccountChoice------------");
-        System.out.println("accountDTO "+ accountDTO);
+    public void setShowedAccountChoice(AccountDTO accountDTO){
         this.showedAccountChoice = accountDTO.getLogin();
         init();
     }
     
-    public void setMyAccountChoice(String username) throws AppBaseException{
-        System.out.println("-------------My account Choice-------");
-        System.out.println("uesename "+ username);
+    public String setMyAccountChoice(String username){
         this.showedAccountChoice = username;
-        init();
+        return init();
     }
 
-    private void init() throws AppBaseException{
-        System.out.println("-------------init-----------");
-        System.out.println("showed account choice "+ showedAccountChoice);
+    private String init(){
         showedAccount = accountController.downloadAccountForDetails(showedAccountChoice);
-        System.out.println("showed account "+showedAccount);
-//        return sh;
+        return "myAccountDetails";
     }
 
     public AccountDTO getShowedAccount() {
@@ -71,7 +64,7 @@ public class AccountDetailsBean implements Serializable {
         return "listCosmetics";
     }
 
-    public String refresh() throws AppBaseException{
+    public String refresh(){
         init();
         return "";
     }

@@ -27,8 +27,6 @@ public class CategoryConverter {
     }
     
     public static Category createCategoryEntityFromDTOForCosmetic(CategoryDTO categoryDTO) {
-        System.out.println("Category converter" + categoryDTO);
-        
         return new Category(categoryDTO.getCategoryId(),
         categoryDTO.getCategoryName());
     }
@@ -43,7 +41,7 @@ public class CategoryConverter {
         category.getCategoryName());
     }
     
-//    List<Cosmetic> listCosmetics = cosmeticFacade.findAll();
+
     public static List<CategoryDTO> createListCategoriesDTOFromEntity(List<Category> listCategories) {
         List<CategoryDTO> listCategoriesDTO = new ArrayList<>();
 

@@ -41,7 +41,6 @@ public class SubstrateController implements Serializable {
             return "listSubstrates";
         } catch (SubstrateException se) {
             if (SubstrateException.KEY_SUBSTRATE_NAME_EXISTS.equals(se.getMessage())) {
-                System.out.println("-----------------Substrate exception wejście do exists-----------");
                 ContextUtils.emitInternationalizedMessage("createNewSubstrateForm:name",
                         SubstrateException.KEY_SUBSTRATE_NAME_EXISTS);
             } else {

@@ -50,7 +50,6 @@ public class LabController implements Serializable{
         labEndpoint.setTypeAsLabTechnician(labDTO, accountLogin, newStamp);
         return newStamp;
         }catch (AccountException se) {
-            System.out.println("SE Message" + se.getMessage());
             if (AccountException.KEY_ADMIN_STAMP_EXISTS.equals(se.getMessage())) {
                 ContextUtils.emitInternationalizedMessage("validateAccountForm:adminStamp",
                         AccountException.KEY_ADMIN_STAMP_EXISTS);

@@ -17,6 +17,7 @@ static final public String KEY_CATEGORY_NAME_EXISTS = "error.categories.db.const
     static final public String KEY_CATEGORY_OPTIMISTIC_LOCK = "error.categories.optimisticlock";
     static final public String KEY_CATEGORY_NOT_READ_FOR_EDITION = "error.categories.categoryNotDownoladedForEdition";
     static final public String KEY_CATEGORY_NOT_READ_FOR_COSMETIC = "error.categories.categoryNotDownoladedForCosmetic";
+    static final public String KEY_CATEGORY_ANALYSIS_DEMANDED = "error.categories.analysisDemanded";
     
 
     public CategoryException(String message) {
@@ -44,10 +45,16 @@ static final public String KEY_CATEGORY_NAME_EXISTS = "error.categories.db.const
         ce.category=category;
         return ce;
     }
+    
+    public static CategoryException createExceptionDemandsAnalysis(Category category) {
+        CategoryException ce = new CategoryException(KEY_CATEGORY_ANALYSIS_DEMANDED);
+        ce.category=category;
+        return ce;
+    }
 
     
     
-    static public CategoryException createSubstrateExceptionWithOptimisticLockKey(Category category, OptimisticLockException oe) {
+    static public CategoryException createCategoryExceptionWithOptimisticLockKey(Category category, OptimisticLockException oe) {
         CategoryException ce = new CategoryException(KEY_CATEGORY_OPTIMISTIC_LOCK);
         ce.category=category;
         return ce;

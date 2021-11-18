@@ -13,6 +13,7 @@ import pl.lodz.p.it.spjava.e11.sa.dto.AnalysisDTO;
 import pl.lodz.p.it.spjava.e11.sa.dto.CategoryDTO;
 import pl.lodz.p.it.spjava.e11.sa.ejb.endpoint.AnalysisEndpoint;
 import pl.lodz.p.it.spjava.e11.sa.exception.AppBaseException;
+import pl.lodz.p.it.spjava.e11.sa.web.analysis.AnalysisController;
 
 @SessionScoped
 @Named
@@ -20,6 +21,9 @@ public class EditCategoryBean implements Serializable {
 
     @Inject
     private CategoryController categoryController;
+    
+    @Inject
+    private AnalysisController analysisController;
     
     @EJB
     private AnalysisEndpoint analysisEndpoint;
@@ -40,8 +44,8 @@ public class EditCategoryBean implements Serializable {
         }
     }
 
-    public void setEditedCategory(CategoryDTO editedCategory) throws AppBaseException{
-        listAnalysisDTO = analysisEndpoint.listAllAnalysis();
+    public void setEditedCategory(CategoryDTO editedCategory){
+        listAnalysisDTO = analysisController.listAllAnalysis();
         this.editedCategory = categoryController.getCategoryForEdition(editedCategory);
     }
 
@@ -49,16 +53,11 @@ public class EditCategoryBean implements Serializable {
         if (null == editedCategory) {
             return "main";
         }
-        System.out.println("--------EditCategoryBean---------");
         selectedAnalysisList = new ArrayList<>();
-        System.out.println("selected analysis list "+ selectedAnalysisList);
         for (AnalysisDTO analysisDTO : listAnalysisDTO) {
             if (analysisDTO.isSelected() == true) {
-                System.out.println("-----------------pętla for------");
                 selectedAnalysisList.add(analysisDTO);
-                System.out.println("selected analysis "+ selectedAnalysisList);
-                analysisDTO.setSelected(false);
-                
+                analysisDTO.setSelected(false);  
             }
         }
         return categoryController.saveCategoryAfterEdition(editedCategory, selectedAnalysisList);

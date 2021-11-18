@@ -48,11 +48,9 @@ public class AssessorController implements Serializable{
         assessorEndpoint.setTypeAsAssessor(assessorDTO, accountLogin, newStamp);
         return newStamp;
         }catch (AccountException se) {
-            System.out.println("SE Message" + se.getMessage());
             if (AccountException.KEY_ADMIN_STAMP_EXISTS.equals(se.getMessage())) {
                 ContextUtils.emitInternationalizedMessage("validateAccountForm:adminStamp",
                         AccountException.KEY_ADMIN_STAMP_EXISTS);
-
             } else {
                 Logger.getLogger(AccountException.class.getName()).log(Level.SEVERE,
                         "Zgłoszenie w metodzie akcji validateAccount-setType  wyjątku: ", se);

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.lodz.p.it.spjava.e11.sa.entity;
 
 import java.io.Serializable;
@@ -26,8 +21,7 @@ import lombok.Setter;
 
 @Entity
 
-@Table(name = "SUBSTRATES", indexes = @Index(name = "sn_unique", columnList = "SUBSTRATE_NAME"))
-
+@Table(name = "Substrates", indexes = @Index(name = "DBCONSTRAINT_UNIQUE_SUBSTRATE_NAME", columnList = "substrateName", unique=true))
 @NamedQueries({
     @NamedQuery(name = "Substrate.findAll", query = "SELECT s FROM Substrate s"),
     @NamedQuery(name = "Substrate.findBySubstrateId", query = "SELECT s FROM Substrate s WHERE s.substrateId = :substrateId"),
@@ -51,10 +45,8 @@ public class Substrate extends AbstractEntity implements Serializable {
     
     @Getter
     @Setter
-    
     @NotNull(message="{constraint.notnull")
     @Size(min=3,max=32,message="{constraint.string.length.notinrange}")
-    @Column(name = "SUBSTRATE_NAME", unique = true, nullable = false)
     private String substrateName;
 
     @Getter
@@ -65,19 +57,10 @@ public class Substrate extends AbstractEntity implements Serializable {
     private String substrateDescription;
 
     @ManyToMany(mappedBy = "describedBy")
-//    @JoinTable(
-//            name = "describedBy",
-//            joinColumns = {
-//                @JoinColumn(name = "SUBSTRATE_ID", nullable = false)},
-//            inverseJoinColumns = {
-//                @JoinColumn(name = "TOXYCOLOGY_ID", nullable = false)}
-//    )
     private List<Toxicology> usedInToxicology = new ArrayList<>();
 
     public Substrate(Long substrateId, String substrateName, String substrateDescription) {
         this.substrateId = substrateId;
-//        this.version = version;
-//        this.lastModified = lastModified;
         this.substrateName = substrateName;
         this.substrateDescription = substrateDescription;
     }

@@ -18,6 +18,7 @@ import pl.lodz.p.it.spjava.e11.sa.dto.SubstrateDTO;
 import pl.lodz.p.it.spjava.e11.sa.ejb.endpoint.AdministratorEndpoint;
 import pl.lodz.p.it.spjava.e11.sa.entity.Administrator;
 import pl.lodz.p.it.spjava.e11.sa.exception.AccountException;
+import static pl.lodz.p.it.spjava.e11.sa.exception.AccountException.KEY_LOGIN_DOES_EXIST;
 import pl.lodz.p.it.spjava.e11.sa.exception.AppBaseException;
 
 /**
@@ -37,6 +38,9 @@ public class AccountController implements Serializable {
     private ResetPasswordBean resetPasswordBean;
 
     @Inject
+    private AccountDetailsBean accountDetailsBean;
+
+    @Inject
     private AdministratorEndpoint administratorEndpoint;
 
     @Getter
@@ -44,7 +48,7 @@ public class AccountController implements Serializable {
 
     @Getter
     private AccountDTO editedAccount;
-    
+
     @Getter
     private AccountDTO downloadedAccount;
 
@@ -52,23 +56,47 @@ public class AccountController implements Serializable {
 
     private AccountDTO createdAccount;
 
-    public String createAccount(AccountDTO newAccountDTO) throws AppBaseException {
+    public String confirmAccount(AccountDTO newAccount) {
+        try {
+            accountEndpoint.confirmAccount(newAccount);
+            return "confirmAccount";
+        } catch (AccountException ae) {
+            if (AccountException.KEY_LOGIN_DOES_NOT_EXIST.equals(ae.getMessage())) {
+                return "confirmAccount";
+            } else if (AccountException.KEY_LOGIN_DOES_EXIST.equals(ae.getMessage())) {
+                ContextUtils.emitInternationalizedMessage("createAccountForm:login",
+                        AccountException.KEY_LOGIN_DOES_EXIST);
+            } else if (AccountException.KEY_EMAIL_EXISTS.equals(ae.getMessage())) {
+                ContextUtils.emitInternationalizedMessage("createAccountForm:email",
+                        AccountException.KEY_EMAIL_EXISTS);
+            } else {
+                Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE,
+                        "Zgłoszenie w metodzie akcji createSubstrate wyjątku: ", ae);
+            }
+            return null;
+        } catch (AppBaseException abe) {
+            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE,
+                    "Zgłoszenie w metodzie akcji createSubstrate wyjątku typu: ", abe.getClass());
+            if (ContextUtils.isInternationalizationKeyExist(abe.getMessage())) {
+                ContextUtils.emitInternationalizedMessage(null, abe.getMessage());
+            }
+            return null;
+        }
+    }
+
+    public String createAccount(AccountDTO newAccountDTO) {
         try {
             createdAccount = newAccountDTO;
             accountEndpoint.createAccount(createdAccount);
             createdAccount = null;
             return "createAccountSucces";
         } catch (AccountException se) {
-            System.out.println("SE Message" + se.getMessage());
             if (AccountException.KEY_LOGIN_EXISTS.equals(se.getMessage())) {
-                System.out.println("-----------Exception Login------------");
                 ContextUtils.emitInternationalizedMessage("createNewAccountForm:login",
                         AccountException.KEY_LOGIN_EXISTS);
             } else if (AccountException.KEY_EMAIL_EXISTS.equals(se.getMessage())) {
-                System.out.println("-----------Exception Email------------");
                 ContextUtils.emitInternationalizedMessage("createNewAccountForm:email",
                         AccountException.KEY_EMAIL_EXISTS);
-
             } else {
                 Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE,
                         "Zgłoszenie w metodzie akcji createAccount wyjątku: ", se);
@@ -132,8 +160,6 @@ public class AccountController implements Serializable {
 
     public AccountDTO downloadAccountForDetails(String userName) {
         try {
-            System.out.println("-------------Controller-------------");
-            System.out.println("user Name "+userName);
             downloadedAccount = accountEndpoint.downloadAccountForDetails(userName);
             return downloadedAccount;
         } catch (AccountException ae) {
@@ -168,58 +194,27 @@ public class AccountController implements Serializable {
         }
     }
 
-    public String resetSession() {
-        ContextUtils.invalidateSession();
-        /* Poprawne zakończenie sesji wymaga wymuszenia nowego żądania na przeglądarce, stąd metoda ta
-         * prowadzi do przypadku nawigacji z elementem <redirect />.
-         * UWAGA: integracja logowania typu BASIC z przeglądarką powoduje, że czasem mimo to "wylogowanie" jest nieskuteczne - 
-         * powstaje nowa sesja już zalogowanego użytkownika. Dlatego bezpieczniej jest stosować uwierzytelnianie przez formularz (FORM).
-         */
-        return "cancelAction";
-    }
-
-    public String getMyLogin() {
-        return ContextUtils.getUserName();
-    }
-
-//    private KlientDTO klientUtworz;
-//
-//    private PracownikDTO pracownikUtworz;
-//
-//    private AdministratorDTO administratorUtworz;
     @Getter
     private AccountDTO accountChangePassword;
 
-    public String downloadAccountForChangePassword(AccountDTO accountDTO) throws AppBaseException {
+    public String downloadAccountForChangePassword(AccountDTO accountDTO) {
         try {
-
             accountChangePassword = accountEndpoint.getAccountForChangePassword(accountDTO);
-            System.out.println("-----------------Controller--------------");
-            System.out.println("accountChangePassword " + accountChangePassword);
-            System.out.println("login " + accountChangePassword.getLogin());
             accountChangePassword.setAnswer(null);
-            System.out.println("-----------czy po ustawnieniu konta wraca do Controllera -------");
-            System.out.println("account Change Password " + accountChangePassword);
-            System.out.println("account for opassword " + resetPasswordBean.getAccountForPassword());
-            resetPasswordBean.setAccountForPassword(accountChangePassword);
+            resetPasswordBean.setAccountForChangePassword(accountChangePassword);
             return "resetPassword";
-//            return accountChangePassword;
-
         } catch (AccountException ae) {
             if (AccountException.KEY_ACCOUNT_NOT_READ_FOR_CHANGE_PASSWORD.equals(ae.getMessage())) {
-                System.out.println("--------Controller------- download Account for Change Password-------------");
-                System.out.println("account not read");
-                ContextUtils.emitInternationalizedMessage("changePasswordForm:notReadForChangePassword",
+                ContextUtils.emitInternationalizedMessage("resetPasswordRequestForm:login",
                         AccountException.KEY_ACCOUNT_NOT_READ_FOR_CHANGE_PASSWORD);
             } else if (AccountException.KEY_LOGIN_DOES_NOT_EXIST.equals(ae.getMessage())) {
-                System.out.println("--------Controller------- download Account for Change Password-------------");
-                System.out.println("login nie istnieje");
-                ContextUtils.emitInternationalizedMessage("changePasswordForm:accountDoesNotExist",
+                ContextUtils.emitInternationalizedMessage(null,
                         AccountException.KEY_LOGIN_DOES_NOT_EXIST);
             } else {
                 Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE,
                         "Zgłoszenie w metodzie akcji editSubstrate wyjątku: ", ae);
             }
+
             return null;
         } catch (AppBaseException abe) {
             Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE,
@@ -229,10 +224,9 @@ public class AccountController implements Serializable {
             }
             return null;
         }
-
     }
 
-    public String resetPassword(AccountDTO accountDTO) throws AppBaseException {
+    public String resetPassword(AccountDTO accountDTO) {
         try {
             accountEndpoint.resetPassword(accountDTO);
             return "passwordResetSucces";
@@ -258,13 +252,6 @@ public class AccountController implements Serializable {
         }
     }
 
-    public AccountDTO getKontoEdytuj() {
-        return editAccount;
-    }
-
-//    public KlientDTO getKlientRejestracja() {
-//        return klientRejestracja;
-//    }
     public AccountController() {
     }
 
@@ -274,11 +261,9 @@ public class AccountController implements Serializable {
 
     }
 
-    public String saveAccountAfterValidation(AccountDTO accountDTO, String adminLogin) throws AppBaseException {
+    public String saveAccountAfterValidation(AccountDTO accountDTO, String adminLogin) {
         try {
-            System.out.println("Account controller accountDTO " + accountDTO);
             accountEndpoint.saveAccountAfterValidation(accountDTO, adminLogin);
-            System.out.println("Account controller accountDTO " + accountDTO);
             return "listAccounts";
         } catch (AccountException ae) {
             if (AccountException.KEY_ADMIN_STAMP_EXISTS.equals(ae.getMessage())) {
@@ -286,6 +271,8 @@ public class AccountController implements Serializable {
                         AccountException.KEY_ADMIN_STAMP_EXISTS);
             } else if (AccountException.KEY_ADMIN_OPTIMISTIC_LOCK.equals(ae.getMessage())) {
                 ContextUtils.emitInternationalizedMessage(null, AccountException.KEY_ADMIN_OPTIMISTIC_LOCK);
+            } else if (AccountException.KEY_ACCOUNT_VALIDATED.equals(ae.getMessage())) {
+                ContextUtils.emitInternationalizedMessage(null, AccountException.KEY_ACCOUNT_VALIDATED);
             } else {
                 Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE,
                         "Zgłoszenie w metodzie akcji validateAccount wyjątku: ", ae);
@@ -302,15 +289,18 @@ public class AccountController implements Serializable {
 
     }
 
-
-    public String saveUserAccountAfterEdition(AccountDTO accountDTO) {
+    public String saveUserAccountAfterEdition(AccountDTO accountDTO, String oldLogin) {
         try {
-            accountEndpoint.saveUserAccountAfterEdition(accountDTO);
+            accountEndpoint.saveUserAccountAfterEdition(accountDTO, oldLogin);
             return "listAccounts";
         } catch (AccountException ae) {
             if (AccountException.KEY_ADMIN_STAMP_EXISTS.equals(ae.getMessage())) {
                 ContextUtils.emitInternationalizedMessage("validateAccountForm:adminStamp",
                         AccountException.KEY_ADMIN_STAMP_EXISTS);
+            } else if (AccountException.KEY_EMAIL_EXISTS.equals(ae.getMessage())) {
+                ContextUtils.emitInternationalizedMessage(null, AccountException.KEY_EMAIL_EXISTS);
+            } else if (AccountException.KEY_LOGIN_DOES_EXIST.equals(ae.getMessage())) {
+                ContextUtils.emitInternationalizedMessage(null, AccountException.KEY_LOGIN_DOES_EXIST);
             } else if (AccountException.KEY_ADMIN_OPTIMISTIC_LOCK.equals(ae.getMessage())) {
                 ContextUtils.emitInternationalizedMessage(null, AccountException.KEY_ADMIN_OPTIMISTIC_LOCK);
             } else {
@@ -332,13 +322,17 @@ public class AccountController implements Serializable {
     public String saveMyAccountAfterEdition(AccountDTO accountDTO) {
         try {
             accountEndpoint.saveMyAccountAfterEdition(accountDTO);
-            return "listAccounts";
+            return accountDetailsBean.setMyAccountChoice(accountDTO.getLogin());
         } catch (AccountException ae) {
             if (AccountException.KEY_ADMIN_STAMP_EXISTS.equals(ae.getMessage())) {
                 ContextUtils.emitInternationalizedMessage("validateAccountForm:adminStamp",
                         AccountException.KEY_ADMIN_STAMP_EXISTS);
-            } else if (AccountException.KEY_ADMIN_OPTIMISTIC_LOCK.equals(ae.getMessage())) {
-                ContextUtils.emitInternationalizedMessage(null, AccountException.KEY_ADMIN_OPTIMISTIC_LOCK);
+            } else if (AccountException.KEY_EMAIL_EXISTS.equals(ae.getMessage())) {
+                ContextUtils.emitInternationalizedMessage(null, AccountException.KEY_EMAIL_EXISTS);
+            } else if (AccountException.KEY_LOGIN_DOES_EXIST.equals(ae.getMessage())) {
+                ContextUtils.emitInternationalizedMessage(null, AccountException.KEY_LOGIN_DOES_EXIST);
+            } else if (AccountException.KEY_ACCOUNT_OPTIMISTIC_LOCK.equals(ae.getMessage())) {
+                ContextUtils.emitInternationalizedMessage(null, AccountException.KEY_ACCOUNT_OPTIMISTIC_LOCK);
             } else {
                 Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE,
                         "Zgłoszenie w metodzie akcji validateAccount wyjątku: ", ae);
@@ -355,185 +349,55 @@ public class AccountController implements Serializable {
 
     }
 
-//    public String setTypeAsAdministrator (String accountLogin, String newStamp) throws AppBaseException{
-//        try {
-//        AdministratorDTO administratorDTO = new AdministratorDTO();
-//            System.out.println("--------------------------");
-//            System.out.println("Account controller set type administratorDTO"+ administratorDTO);
-//            System.out.println("Account controller set type newStamp "+newStamp);
-//            System.out.println("Account controller set type accountLogin "+accountLogin);
-//        administratorEndpoint.setTypeAsAdministrator(administratorDTO, accountLogin, newStamp);
-//        return "listAccounts";
-//        }catch (AccountException se) {
-//            System.out.println("SE Message" + se.getMessage());
-//            if (AccountException.KEY_ADMIN_STAMP_EXISTS.equals(se.getMessage())) {
-//                ContextUtils.emitInternationalizedMessage("validateAccountForm:adminStamp",
-//                        AccountException.KEY_ADMIN_STAMP_EXISTS);
-//
-//            } else {
-//                Logger.getLogger(AccountException.class.getName()).log(Level.SEVERE,
-//                        "Zgłoszenie w metodzie akcji validateAccount-setType  wyjątku: ", se);
-//            }
-//            return null;
-//        } catch (AppBaseException abe) {
-//            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE,
-//                    "Zgłoszenie w metodzie akcji validateAccount-setType wyjątku typu: ", abe.getClass());
-//            if (ContextUtils.isInternationalizationKeyExist(abe.getMessage())) {
-//                ContextUtils.emitInternationalizedMessage(null, abe.getMessage());
-//            }
-//            return null;
-//        }
-//    }
-//    public String utworzKlienta(KlientDTO klient) {
-//        try {
-//            klientUtworz = klient;
-//            kontoEndpoint.utworzKonto(klientUtworz);
-//            klientUtworz = null;
-//            return "success";
-//        } catch (KontoException ke) {
-//            if (KontoException.KEY_DB_CONSTRAINT.equals(ke.getMessage())) {
-//                ContextUtils.emitInternationalizedMessage("login", KontoException.KEY_DB_CONSTRAINT); //wyjątki aplikacyjne powinny przenosić jedynie klucz do internacjonalizacji
-//            } else {
-//                Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, "Zgłoszenie w metodzie akcji utworzKlienta wyjatku: ", ke);
-//            }
-//            return null;
-//        } catch (AppBaseException abe) {
-//            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, "Zgłoszenie w metodzie akcji utworzKlienta wyjatku typu: ", abe.getClass());
-//            if (ContextUtils.isInternationalizationKeyExist(abe.getMessage())) {
-//                ContextUtils.emitInternationalizedMessage(null, abe.getMessage()); //wyjątki aplikacyjne powinny przenosić jedynie klucz do internacjonalizacji
-//            }
-//            return null;
-//        }
-//    }
-//
-//    public String utworzPracownika(PracownikDTO pracownik) {
-//        try {
-//            pracownikUtworz = pracownik;
-//            kontoEndpoint.utworzKonto(pracownikUtworz);
-//            pracownikUtworz = null;
-//            return "success";
-//        } catch (KontoException ke) {
-//            if (KontoException.KEY_DB_CONSTRAINT.equals(ke.getMessage())) {
-//                ContextUtils.emitInternationalizedMessage(null, KontoException.KEY_DB_CONSTRAINT); //wyjątki aplikacyjne powinny przenosić jedynie klucz do internacjonalizacji
-//            } else {
-//                Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, "Zgłoszenie w metodzie akcji utworzPracownika wyjatku: ", ke);
-//            }
-//            return null;
-//        } catch (AppBaseException abe) {
-//            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, "Zgłoszenie w metodzie akcji utworzPracownika wyjatku typu: ", abe.getClass());
-//            if (ContextUtils.isInternationalizationKeyExist(abe.getMessage())) {
-//                ContextUtils.emitInternationalizedMessage(null, abe.getMessage()); //wyjątki aplikacyjne powinny przenosić jedynie klucz do internacjonalizacji
-//            }
-//            return null;
-//        }
-//    }
-//
-//    public String utworzAdministratora(AdministratorDTO admin) {
-//        try {
-//            administratorUtworz = admin;
-//            kontoEndpoint.utworzKonto(administratorUtworz);
-//            administratorUtworz = null;
-//            return "success";
-//        } catch (KontoException ke) {
-//            if (KontoException.KEY_DB_CONSTRAINT.equals(ke.getMessage())) {
-//                ContextUtils.emitInternationalizedMessage("login", KontoException.KEY_DB_CONSTRAINT); //wyjątki aplikacyjne powinny przenosić jedynie klucz do internacjonalizacji
-//            } else {
-//                Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, "Zgłoszenie w metodzie akcji utworzAdministratora wyjatku: ", ke);
-//            }
-//            return null;
-//        } catch (AppBaseException abe) {
-//            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, "Zgłoszenie w metodzie akcji utworzAdministratora wyjatku typu: ", abe.getClass());
-//            if (ContextUtils.isInternationalizationKeyExist(abe.getMessage())) {
-//                ContextUtils.emitInternationalizedMessage(null, abe.getMessage()); //wyjątki aplikacyjne powinny przenosić jedynie klucz do internacjonalizacji
-//            }
-//            return null;
-//        }
-//    }
-//
-//    public String potwierdzRejestracjeKlienta(KlientDTO klient) {
-//        this.klientRejestracja = klient;
-//        return "confirmRegister";
-//    }
-    public String startChangingPassword(AccountDTO account) {
-        this.accountChangePassword = account;
-        return "changePassword";
+    public String activateAccount(AccountDTO accountDTO) {
+        try {
+            accountEndpoint.activateAccount(accountDTO);
+            return "listAccounts";
+        } catch (AccountException ae) {
+            if (AccountException.KEY_ACCOUNT_ACTIVATED.equals(ae.getMessage())) {
+                ContextUtils.emitInternationalizedMessage(null, AccountException.KEY_ACCOUNT_ACTIVATED);
+            } else if (AccountException.KEY_ACCOUNT_DEACTIVATED.equals(ae.getMessage())) {
+                ContextUtils.emitInternationalizedMessage(null, AccountException.KEY_ACCOUNT_DEACTIVATED);
+            } else {
+                Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE,
+                        "Zgłoszenie w metodzie akcji validateAccount wyjątku: ", ae);
+            }
+            return null;
+        } catch (AppBaseException abe) {
+            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE,
+                    "Zgłoszenie w metodzie akcji validateAccount wyjątku typu: ", abe.getClass());
+            if (ContextUtils.isInternationalizationKeyExist(abe.getMessage())) {
+                ContextUtils.emitInternationalizedMessage(null, abe.getMessage());
+            }
+            return null;
+        }
     }
 
-//    public String rejestrujKlienta() {
-//        try {
-//            kontoEndpoint.rejestrujKlienta(klientRejestracja);
-//            klientRejestracja = null;
-//            return "success";
-//        } catch (KontoException ke) {
-//            if (KontoException.KEY_DB_CONSTRAINT.equals(ke.getMessage())) {
-//                ContextUtils.emitInternationalizedMessage("login", KontoException.KEY_DB_CONSTRAINT); //wyjątki aplikacyjne powinny przenosić jedynie klucz do internacjonalizacji
-//            } else {
-//                Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, "Zgłoszenie w metodzie akcji rejestrujKlienta wyjatku: ", ke);
-//            }
-//            return null;
-//        } catch (AppBaseException abe) {
-//            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, "Zgłoszenie w metodzie akcji rejestrujKlienta wyjatku typu: ", abe.getClass());
-//            if (ContextUtils.isInternationalizationKeyExist(abe.getMessage())) {
-//                ContextUtils.emitInternationalizedMessage(null, abe.getMessage()); //wyjątki aplikacyjne powinny przenosić jedynie klucz do internacjonalizacji
-//            }
-//            return null;
-//        }
-//    }
-//
-    public void activateAccount(AccountDTO accountDTO) {
-        accountEndpoint.activateAccount(accountDTO);
+    public String deactivateAccount(AccountDTO accountDTO) {       
+        try {
+            accountEndpoint.deactivateAccount(accountDTO);
+            return "listAccounts";
+        } catch (AccountException ae) {
+            if (AccountException.KEY_ACCOUNT_ACTIVATED.equals(ae.getMessage())) {
+                ContextUtils.emitInternationalizedMessage(null, AccountException.KEY_ACCOUNT_ACTIVATED);
+            } else if (AccountException.KEY_ACCOUNT_DEACTIVATED.equals(ae.getMessage())) {
+                ContextUtils.emitInternationalizedMessage(null, AccountException.KEY_ACCOUNT_DEACTIVATED);
+            } else {
+                Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE,
+                        "Zgłoszenie w metodzie akcji validateAccount wyjątku: ", ae);
+            }
+            return null;
+        } catch (AppBaseException abe) {
+            Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE,
+                    "Zgłoszenie w metodzie akcji validateAccount wyjątku typu: ", abe.getClass());
+            if (ContextUtils.isInternationalizationKeyExist(abe.getMessage())) {
+                ContextUtils.emitInternationalizedMessage(null, abe.getMessage());
+            }
+            return null;
+        }
+        
     }
-//
-    public void deactivateAccount(AccountDTO accountDTO) {
-        accountEndpoint.deactivateAccount(accountDTO);
-    }
-//
-//    public void potwierdzKonto(KontoDTO konto) {
-//        kontoEndpoint.potwierdzKonto(konto);
-//        ContextUtils.emitSuccessMessage(ListaKontPageBean.GENERAL_MSG_ID);
-//    }
-//
-//    public String pobierzKontoDoEdycji(KontoDTO konto) {
-//        kontoEdytuj = kontoEndpoint.pobierzKontoDoEdycji(konto);
-//        return "editAccount";
-//    }
-//
-//    public String zapiszKontoKlientaPoEdycji(KontoDTO konto) throws AppBaseException {
-//        kontoEndpoint.zapiszKontoKlientaPoEdycji(konto);
-//        return "success";
-//    }
-//
-//    public String zapiszKontoPracownikaPoEdycji(KontoDTO konto) throws AppBaseException {
-//        kontoEndpoint.zapiszKontoPracownikaPoEdycji(konto);
-//        return "success";
-//    }
-//
-//    public String zapiszKontoAdministratoraPoEdycji(KontoDTO konto) throws AppBaseException {
-//        kontoEndpoint.zapiszKontoAdministratoraPoEdycji(konto);
-//        return "success";
-//    }
-//
-//    public String zmienHasloKonta(String haslo) {
-//        kontoEndpoint.zmienHaslo(kontoZmienHaslo, haslo);
-//        return "success";
-//    }
-//
-//    public String zmienMojeHaslo(String stare, String nowe) {
-//        kontoEndpoint.zmienMojeHaslo(stare, nowe);
-//        return "success";
-//    }
-//
-//    public List<KontoDTO> pobierzWszystkieKonta() {
-//        return kontoEndpoint.pobierzWszystkieKonta();
-//    }
-//
-//    public List<KontoDTO> dopasujKonta(String loginWzor, String imieWzor, String nazwiskoWzor, String emailWzor) {
-//        return kontoEndpoint.dopasujKonta(loginWzor, imieWzor, nazwiskoWzor, emailWzor);
-//    }
-//
-//    public KontoDTO pobierzMojeKonto() {
-//        return kontoEndpoint.pobierzMojeKontoDTO();
-//    }
+
     @PostConstruct
     private void init() {
         LOG.severe("Session started: " + ContextUtils.getSessionID());

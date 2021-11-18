@@ -12,6 +12,7 @@ import pl.lodz.p.it.spjava.e11.sa.dto.AssessorDTO;
 import pl.lodz.p.it.spjava.e11.sa.dto.CategoryDTO;
 import pl.lodz.p.it.spjava.e11.sa.dto.CosmeticDTO;
 import pl.lodz.p.it.spjava.e11.sa.ejb.facade.CategoryFacade;
+import pl.lodz.p.it.spjava.e11.sa.exception.CosmeticException;
 import pl.lodz.p.it.spjava.e11.sa.web.category.CategoryController;
 
 @SessionScoped
@@ -57,44 +58,26 @@ public class CreateCosmeticBean implements Serializable {
     }
 
 
-    public void confirmCosmetic(){
-        if (null != newCosmetic && null != newCosmetic.getName()) {
+    public String confirmCosmetic() throws CosmeticException{
+                String fromController ="";      
+        if (null != newCosmetic && null != newCosmetic.getName()) {        
             newCosmetic.setAssessedBy(new AssessorDTO(-100l, " "));
-            cosmeticController.confirmCosmetic(newCosmetic);
-            
             categoryController.chooseCategory(newCosmetic,categoryName);
-//            return "confirmCosmetic";
-//        } else {
-//            return "listCosmetics";
+            fromController =cosmeticController.confirmCosmetic(newCosmetic);   
         }
+        return fromController;
     }
     
-//    public void confirmCosmetic(){
-//        if (null != newCosmetic && null != newCosmetic.getName()) {
-//            newCosmetic.setAssessedBy(new AssessorDTO(-100l, " "));
-//            
-//            
-//            cosmeticController.confirmCosmetic(newCosmetic, categoryName);
-//        }
-////            return "confirmCosmetic";
-////        } else {
-////            return "listCosmetics";
-////        }
-//    }
-
+    public String returnConfirmCosmetic(){
+        return "confirmCosmetic";
+    }
+    
     public String createCosmetic(String userName) {
-        System.out.println("-----------category name w BEanie--"+categoryName+"---------------");
         cosmeticController.createCosmetic(newCosmetic, categoryName, userName);
         return "listCosmetics";
     }
 
     public String abort() {
         return "listCosmetics";
-    }
-
-   
-    
-    
-    
-    
+    }  
 }

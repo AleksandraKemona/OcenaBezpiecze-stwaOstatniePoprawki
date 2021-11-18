@@ -19,6 +19,9 @@ public class CosmeticException extends AppBaseException {
     static final public String KEY_COSMETIC_ALREADY_CHANGED = "error.cosmetic.cosmeticAlreadyChanged";
     static final public String KEY_NAME_DOES_NOT_EXIST = "error.cosmetic.nameDoseNotExist";
     static final public String KEY_NAME_DOES_EXIST = "error.cosmetic.nameDoesExist";
+    static final public String KEY_COSMETIC_CHOOSEN = "error.cosmetic.alreadyChoosen";
+    
+    
     
     
 
@@ -28,6 +31,9 @@ public class CosmeticException extends AppBaseException {
     
     @Getter
     private String name;
+    
+    @Getter
+    private Long id;
 
     public CosmeticException(String message) {
         super(message);
@@ -59,6 +65,11 @@ public class CosmeticException extends AppBaseException {
         ce.name = name;
         return ce;
     }
+    static public CosmeticException createCosmeticDoesNotExistException(Long id, NoResultException nre) {
+        CosmeticException ce = new CosmeticException(KEY_NAME_DOES_NOT_EXIST, nre);
+        ce.id = id;
+        return ce;
+    }
     
     static public CosmeticException createCosmeticDoesExistException(String name) {
         CosmeticException ce = new CosmeticException(KEY_NAME_DOES_EXIST);
@@ -68,6 +79,12 @@ public class CosmeticException extends AppBaseException {
     
     public static CosmeticException createExceptionWrongState(Cosmetic cosmetic) {
         CosmeticException ae = new CosmeticException(KEY_COSMETIC_NOT_READ_FOR_EDITION);
+        ae.cosmetic=cosmetic;
+        return ae;
+    }
+    
+    public static CosmeticException createCosmeticAlreadyChoosenException(Cosmetic cosmetic) {
+        CosmeticException ae = new CosmeticException(KEY_COSMETIC_CHOOSEN);
         ae.cosmetic=cosmetic;
         return ae;
     }

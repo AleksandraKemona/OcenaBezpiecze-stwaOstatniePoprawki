@@ -45,8 +45,8 @@ public class DeleteCosmeticBean implements Serializable {
 
     public String confirmDeleteCosmetic(CosmeticDTO cosmeticDTO){
         cosmeticDTO = this.deletedCosmeticChoice;
-        cosmeticController.confirmDeleteCosmetic(cosmeticDTO);
-        return "listCosmetics";
+        return cosmeticController.confirmDeleteCosmetic(cosmeticDTO);
+         
     }
 
     public String abort() {

@@ -45,22 +45,12 @@ public class CreateAnalysisBean implements Serializable {
         return newAnalysis;
     }
 
-//    public String confirmAnalysis() {
-//
-//        if (null != newAnalysis && null != newAnalysis.getName()) {
-//            return "confirmAnalysis";
-//        } else {
-//            
-//            return "listAnalysis";
-//        }
-//    }ToDo usunąć cały ciąg
-
     public String createAnalysis() {
         if (null == newAnalysis) {
             return "listAnalysis";
         }
-       analysisController.createAnalysis(newAnalysis);
-        return "listAnalysis";
+       return analysisController.createAnalysis(newAnalysis);
+
     }
 
     public String abort() {

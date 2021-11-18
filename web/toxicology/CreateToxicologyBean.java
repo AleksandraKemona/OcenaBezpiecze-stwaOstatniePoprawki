@@ -66,7 +66,6 @@ public class CreateToxicologyBean implements Serializable {
     public void init(){
         newToxicology = new ToxicologyDTO();
         appliedSubstrates = new String();
-        System.out.println("demanded Bean" + appliedSubstrates);
         listSubstrateDTO = substrateController.listAllSubstrates();
     }
 
@@ -83,7 +82,6 @@ public class CreateToxicologyBean implements Serializable {
                 int cuttingPoint = appliedSubstrates.indexOf(coma);
                 substrate = appliedSubstrates.substring(0, cuttingPoint);
                 SubstrateDTO substrateDTO = substrateController.getSubstrateForCosmetic(substrate);
-//                SubstrateDTO substrateDTO = SubstrateConverter.createSubstrateDTOFromEntity(substrateFacade.findBySubstrateNameForToxicology(substrate));
                 appliedSubstrates = appliedSubstrates.substring(cuttingPoint + 2, appliedSubstrates.length());
                 appliedSubstratesList.add(substrateDTO);
             }else{

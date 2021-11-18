@@ -23,8 +23,6 @@ public class AnalysisController implements Serializable {
 
     private static final Logger LOG = Logger.getLogger(AnalysisController.class.getName());
 
-//    @EJB
-//    private AnalysisFacade analysisFacade;
     @EJB
     private AnalysisEndpoint analysisEndpoint;
 
@@ -43,16 +41,12 @@ public class AnalysisController implements Serializable {
     }
 
     public String createAnalysis(AnalysisDTO newAnalysis) {
-
         try {
             createdAnalysis = newAnalysis;
             analysisEndpoint.createAnalysis(createdAnalysis);
-            createdAnalysis = null;
-            return "listAnalysis";
+            createdAnalysis = null; 
         } catch (AnalysisException ae) {
-            System.out.println("-----------------Controller wejście do Catch analysis exception-------");
             if (AnalysisException.KEY_ANALYSIS_NAME_EXISTS.equals(ae.getMessage())) {
-                System.out.println("-------Controller analysis name exists---------");
                 ContextUtils.emitInternationalizedMessage("createNewAnalysisForm:name",
                         AnalysisException.KEY_ANALYSIS_NAME_EXISTS);
             } else {
@@ -68,6 +62,7 @@ public class AnalysisController implements Serializable {
             }
             return null;
         }
+        return "listAnalysis";
     }
 
     public List<AnalysisDTO> listAllAnalysis() {
@@ -113,7 +108,6 @@ public class AnalysisController implements Serializable {
             return "listAnalysis";
         } catch (AnalysisException ae) {
             if (AnalysisException.KEY_ANALYSIS_NAME_EXISTS.equals(ae.getMessage())) {
-                System.out.println("--------- Controller wejście do if name exists------------");
                 ContextUtils.emitInternationalizedMessage("editAnalysisForm:name",
                         AnalysisException.KEY_ANALYSIS_NAME_EXISTS);
             } else if (AnalysisException.KEY_ANALYSIS_OPTIMISTIC_LOCK.equals(ae.getMessage())) {

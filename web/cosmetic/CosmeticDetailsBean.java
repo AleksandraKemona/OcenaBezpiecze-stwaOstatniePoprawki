@@ -27,7 +27,7 @@ public class CosmeticDetailsBean implements Serializable {
 
     @Inject
     private CategoryController categoryController;
-    
+
     @Inject
     private ListCosmeticsBean listCosmeticsBean;
 
@@ -46,7 +46,7 @@ public class CosmeticDetailsBean implements Serializable {
     private AnalysisDTO analysisForResults;
 
     private CosmeticDTO showedCosmeticChoice;
-    
+
     @Getter
     @Setter
     private ToxicologyDTO newToxicology;
@@ -54,23 +54,23 @@ public class CosmeticDetailsBean implements Serializable {
     @Getter
     @Setter
     private String appliedSubstrates;
-    
+
     @Getter
     @Setter
     private Long describedCosmeticId;
 
-    public void setShowedCosmeticChoice(CosmeticDTO showedCosmetic){
+    public String setShowedCosmeticChoice(CosmeticDTO showedCosmetic) {
         this.showedCosmeticChoice = showedCosmetic;
-        init();
+        return init();
     }
 
-    private String init(){
+    private String init() {
         showedCosmetic = cosmeticController.downloadCosmeticForDetails(showedCosmeticChoice);
         newToxicology = new ToxicologyDTO();
         appliedSubstrates = new String();
         appliedSubstrates = showedCosmetic.getComposition();
         describedCosmeticId = showedCosmetic.getId();
-        return appliedSubstrates;
+        return "cosmeticDetails";
     }
 
     public CosmeticDTO getShowedCosmetic() {
@@ -78,7 +78,7 @@ public class CosmeticDetailsBean implements Serializable {
 
             return showedCosmetic;
         } else {
-            return new CosmeticDTO(); // Dla unikniecia błędu formularza. Dane nie zostana zachowane.
+            return new CosmeticDTO();
         }
     }
 
@@ -86,95 +86,77 @@ public class CosmeticDetailsBean implements Serializable {
         if (null != showedCosmetic.getCategory()) {
             appliedCategory = categoryController.getCategoryForCosmetic(showedCosmetic.getCategory());
             demandedAnalysis = appliedCategory.getDemandsAnalysis();
-            List<AnalysisDTO> demandedAnalysiswithResults=new ArrayList<>();
+            List<AnalysisDTO> demandedAnalysiswithResults = new ArrayList<>();
             Map<Long, Integer> resultsMap = showedCosmetic.getResults();
-            if(resultsMap==null){
-                resultsMap=new HashMap<>();
+            if (resultsMap == null) {
+                resultsMap = new HashMap<>();
                 for (AnalysisDTO analysis : demandedAnalysis) {
-                    Long analysisId=analysis.getAnalysisId();
+                    Long analysisId = analysis.getAnalysisId();
                     resultsMap.put(analysisId, 0);
                 }
             }
             for (AnalysisDTO analysis : demandedAnalysis) {
                 Long analysisId = analysis.getAnalysisId();
                 Integer singleResult = resultsMap.get(analysisId);
-                if (singleResult==null) {
+                if (singleResult == null) {
                     analysis.setResultInAnalysis(0);
-                }else{
-                    analysis.setResultInAnalysis(singleResult); 
+                } else {
+                    analysis.setResultInAnalysis(singleResult);
                 }
                 analysis.isInRange();
-                
+
                 demandedAnalysiswithResults.add(analysis);
             }
             appliedCategory.setDemandsAnalysis(demandedAnalysiswithResults);
             return appliedCategory;
         } else {
-            return new CategoryDTO(); // Dla unikniecia błędu formularza. Dane nie zostana zachowane.
+            return new CategoryDTO();
         }
     }
 
     public void setDemandedAnalysis(CategoryDTO categoryDTO) {
-        System.out.println("------set demanded analysis---------");
-        System.out.println("category DTO "+ categoryDTO);
         List<AnalysisDTO> foundAnalysis = categoryController.findDemandedAnalysis(categoryDTO);
-        System.out.println("found analysis "+foundAnalysis);
         this.demandedAnalysis = foundAnalysis;
     }
-    
-    public String editResult (AnalysisDTO analysis){
-//        showedCosmetic=cosmetic;
-        analysisForResults=analysis;
-        
-        return"editResults";
+
+    public String editResult(AnalysisDTO analysis) {
+        analysisForResults = analysis;
+
+        return "editResults";
     }
-    
-    public String saveResult(){
+
+    public String saveResult() {
         int newResult = analysisForResults.getResultInAnalysis();
-        CosmeticDTO cosmeticWithResults= showedCosmetic;
-        System.out.println("---------------wyniki cosmetic Details---------");
-        System.out.println("new Result "+ newResult);
-        System.out.println("showed Cosmetic "+showedCosmetic);
-        Map <Long, Integer> resultsMap = generateMap(newResult);
-        System.out.println("mapa poza ifem "+ resultsMap);
+        CosmeticDTO cosmeticWithResults = showedCosmetic;
+        Map<Long, Integer> resultsMap = generateMap(newResult);
         cosmeticWithResults.setResults(resultsMap);
         cosmeticController.saveResults(cosmeticWithResults);
-return "cosmeticDetails";
-    }
-    
-    public String refreshDetails(CosmeticDTO cosmeticDTO){
         return "cosmeticDetails";
     }
-    
-    public Map <Long, Integer> generateMap(int newResult){
-        CosmeticDTO cosmetic = showedCosmetic;
-        System.out.println("metoda generate map showed cosmetic "+ showedCosmetic);
-        Map <Long, Integer> map = new HashMap<>();
-        Long analysisId=analysisForResults.getAnalysisId();
-        if (cosmetic.getResults()==null) {
-            System.out.println("Mapa 1 new "+ map);
-            map.put(analysisId, newResult);
-               System.out.println("Mapa 2 "+ map);
-               System.out.println("mapa 2 value "+ map.get(analysisForResults));
-        }else{
-            map =cosmetic.getResults();
-            System.out.println("Mapa 1 "+ map);
-            map.put(analysisId, newResult);
-               System.out.println("Mapa 2 "+ map);
-               System.out.println("mapa 2 value "+ map.get(analysisForResults));
-        }
-     return map;
-    }
-    
-    
 
+    public String refreshDetails(CosmeticDTO cosmeticDTO) {
+        return "cosmeticDetails";
+    }
+
+    public Map<Long, Integer> generateMap(int newResult) {
+        CosmeticDTO cosmetic = showedCosmetic;
+        Map<Long, Integer> map = new HashMap<>();
+        Long analysisId = analysisForResults.getAnalysisId();
+        if (cosmetic.getResults() == null) {
+            map.put(analysisId, newResult);
+        } else {
+            map = cosmetic.getResults();
+            map.put(analysisId, newResult);
+        }
+        return map;
+    }
 
     public String abort() {
 
         return "listCosmetics";
     }
 
-    public String refresh(){
+    public String refresh() {
         init();
         return "";
     }

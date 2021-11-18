@@ -84,7 +84,6 @@ public class ContextUtils {
     
     public static String getUserName() {
         Principal p = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal();
-        System.out.println("principal w ContextUtils "+p);
         return (null == p ? "" : p.getName());
     }
 
