@@ -2,29 +2,9 @@
 PROJECT ENDING POSTGRADUATE STUDIES "MODERN BUSINESS APPLICATIONS JAVA/JAKART EE"
 
 ## Introduction
-The aim of the final project was to create a multi-tenant IT system
-supporting creation of reports on the safety of cosmetic products. Cosmetic product assessement 
-process would start with the Sales introducing product for evaluation. Each cosmetic has assigned an order number, but one order
-may include several cosmetics to evaluate. Every cosmetic entry at the moment
-of creation must have an unique name, assigned category and specified
-composition (list of raw materials separated with a comma). 
-System automatically assigns the required analyzes to the cosmetic basing on category,
-and creates toxicological description basing on the composition.Safety Assessor can accept the cosmetic for 
-assessement or resign from previously chosen one. Final peparation of safety report in predesigned form 
-and sending it to client takes place outside of this application.
-
-The IT system consists of statefull web application prepared in Java Enterprise Edition technology and relational database.
-It was prepared with three-layer model that allowed to separate layers of view, buisness logic and data storage.
-All application sites have unified graphical user interface. The development environment was the NetBeans IDE, the deployment server is
-Payara, JavaDB was selected as a database management system.
-
-The functionalities provided to the user vary depending on the access level assigned to the user account.
-To be able to use the application, the user must have a modern web browser and have
-an individual account.  It is possible to operate the user interface in the Polish or English language version
-depending on the language preferences set in the browser. 
-
-System allows simultaneous access to data by many authenticated users,
-thanks to the use of OLTP (On-Line Transactional Processing) and optimistic locks.
+The final project aimed to create a multi-tenant IT system supporting the creation of reports on the safety of cosmetic products. The Cosmetic product assessment process would start with the Sales introducing the product for evaluation. Each cosmetic has assigned an order number, but one order may include several cosmetics to evaluate. Every cosmetic entry at the moment of creation must have a unique name, assigned category, and specified composition (list of raw materials separated with a comma). The system automatically assigns the required analyses to the cosmetic based on category and creates toxicological descriptions based on the composition. Safety Assessor can accept the cosmetic for assessment or resign from the previously chosen one. The final preparation of the safety report in the predesigned form  and sending it to the client takes place outside of this application.
+The IT system consists of a stateful web application prepared in Java Enterprise Edition technology and a relational database. It was prepared with the three-layer model that allowed to separate layers of view, business logic, and data storage. All application sites have a unified graphical user interface. The development environment was the NetBeans IDE, the deployment server was Payara, and JavaDB was selected as a database management system.
+The functionalities provided to the user vary depending on the access level assigned to the user account. To be able to use the application, the user must have a modern web browser and an individual account.  It is possible to operate the user interface in the Polish or English language version depending on the language preferences set in the browser. The system allows simultaneous access to data by many authenticated users, thanks to the use of OLTP (On-Line Transactional Processing) and optimistic locks.
 
 ## Used tools and technologies with version
 
@@ -76,7 +56,7 @@ Launching the created system requires proper preparation of the environment,
 which has a working operating system and a modern web browser.
 In addition, it must have the Payara application server version 5.183 installed and the system
 JavaDB (Apache Derby) version 10.14.2.0. Payara application server and system JavaDB database management 
-should be started and then you should follow the steps described in the following subsections.
+should be started, and then you should follow the steps described in the following subsections.
 
 ### Database creation
 The database should be created with the help of the utility
